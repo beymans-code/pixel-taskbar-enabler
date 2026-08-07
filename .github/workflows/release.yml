@@ -1,0 +1,60 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*' # Trigger on tags like v1.0.0, v1.1, etc.
+  workflow_dispatch: # Allows manual trigger from Actions tab
+
+jobs:
+  release:
+    name: Build and Create Release
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write # Needed to create releases and upload assets
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Configure Keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          # Solo configuramos el keystore si el secreto existe (evita errores en PRs o forks)
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > keystore.jks
+            echo "keyAlias=$KEY_ALIAS" > ReleaseKey.properties
+            echo "keyPassword=$KEY_PASSWORD" >> ReleaseKey.properties
+            echo "storeFile=keystore.jks" >> ReleaseKey.properties
+            echo "storePassword=$KEYSTORE_PASSWORD" >> ReleaseKey.properties
+          fi
+
+      - name: Build Release APK
+        run: ./gradlew assembleRelease
+
+      - name: Prepare Release APK
+        run: |
+          # Rename the generated APK to a more user-friendly name using the tag (e.g., PixelTaskbarEnabler-v1.0.0.apk)
+          mv app/build/outputs/apk/release/app-release.apk PixelTaskbarEnabler-${{ github.ref_name }}.apk
+
+      - name: Publish Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: PixelTaskbarEnabler-${{ github.ref_name }}.apk
+          generate_release_notes: true

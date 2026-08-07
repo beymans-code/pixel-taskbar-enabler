@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Details -->
+    <string name="app_name">Pixel Taskbar Enabler</string>
+    <string name="app_description">Enables the taskbar (tablet style) on Pixel phones.</string>
+    <string name="author">beyman.dev</string>
+    <string name="based_on_text">siavash79/PixelXpert</string>
+
+
+    <!-- MainActivity Tabs & Titles -->
+    <string name="taskbar_settings">Taskbar Settings</string>
+    <string name="recents_settings">Recents Settings</string>
+
+    <!-- Switches & Settings -->
+    <string name="enable_taskbar">Enable Android Taskbar</string>
+    <string name="enable_taskbar_desc">Enables or disables the native taskbar</string>
+    <string name="force_mobile_recents">Force Mobile Recents</string>
+    <string name="force_mobile_recents_desc">Uses the tablet-style recents layout</string>
+    <string name="icon_count_desc">Maximum number of apps in the dock</string>
+    <string name="icon_scale_desc">Adjusts the dock icon size</string>
+    <string name="grid_header_scale_desc">Modifies the size in the recents view</string>
+
+    <!-- Formatted Labels -->
+    <string name="icon_scale_label_format">Icon Scale: %1$d%%</string>
+    <string name="grid_header_scale_label_format">Grid Header Scale: %1$d%%</string>
+    <string name="taskbar_icon_count_label_format">Icon Count: %1$d</string>
+
+    <!-- Buttons -->
+    <string name="apply_changes">Apply Changes</string>
+    <string name="apply_changes_desc">Apply changes</string>
+    <string name="undo">Undo</string>
+    <string name="redo">Redo</string>
+
+    <string name="btn_settings">Settings</string>
+    <string name="btn_logs">Logs</string>
+    <string name="btn_instructions">Instructions</string>
+    <string name="btn_about">About</string>
+
+    <!-- Dialog Settings -->
+    <string name="language">Language</string>
+    <string name="lang_system">System default</string>
+    <string name="lang_english">English</string>
+    <string name="lang_spanish">Español</string>
+    <string name="lang_changed">Language changed.</string>
+    <string name="categories">Categories</string>
+    <string name="app_icon">App Icon</string>
+    <string name="icon_default">Default Icon</string>
+    <string name="icon_themed">Themed Icon</string>
+    <string name="icon_monochrome">Monochrome Icon</string>
+
+    <!-- Bottom Sheet Logs -->
+    <string name="log_history">Log History</string>
+    <string name="no_logs">No logs</string>
+    <string name="clear_logs">Clear Logs</string>
+
+    <!-- Bottom Sheet About -->
+    <string name="about">About</string>
+    <string name="about_desc">A fast and efficient utility designed to enable the taskbar in the
+        native Pixel Launcher, bringing the tablet experience to your phone.</string>
+    <string name="key_features">Key Features</string>
+    <string name="website">Website</string>
+    <string name="credits_title">Credits and Acknowledgments</string>
+    <string name="credits_intro">This project is made possible thanks to the following open-source contributions and teams:</string>
+    <string name="credit_pixelxpert_desc">PixelXpert / AOSPMods: Original team (@siavash79 &amp; @ElTifo) from which inspiration and codebase were taken.</string>
+    <string name="credit_xposed_desc">XposedBridge: The original creation of Xposed by @rovo89.</string>
+    <string name="credit_vector_desc">Vector: The Vector team (LSPosed) for keeping the environment alive.</string>
+    <string name="credit_google_desc">Google &amp; Android: The Android OS and Google team.</string>
+    <string name="credit_pixelxpert_btn">PixelXpert / AOSPMods</string>
+    <string name="credit_xposed_btn">XposedBridge</string>
+    <string name="credit_vector_btn">Vector</string>
+
+    <string name="feature_1">Taskbar activation without modifying the global DPI.</string>
+    <string name="feature_2">Icon and folder scale customization.</string>
+    <string name="feature_3">Control over the number of apps in the dock.</string>
+    <string name="feature_4">Force tablet-style Recents layout on mobile.</string>
+
+    <!-- Bottom Sheet Instructions -->
+    <string name="instructions">Instructions</string>
+    <string name="instruction_0"><b>Prerequisites:</b>\n&#8226; Rooted Pixel device (Magisk, KernelSU)\n&#8226; Active Zygisk environment\n&#8226; Xposed framework installed (LSPosed, Vector, etc.)</string>
+    <string name="instruction_1">1. Open Xposed (<a href="https://github.com/JingMatrix/Vector">JingMatrix/Vector</a>), enable the module and ensure \'Pixel Launcher\' is checked.</string>
+    <string name="instruction_2">2. Ensure a Zygisk environment (e.g., <a
+            href="https://github.com/JingMatrix/NeoZygisk">NeoZygisk</a>).</string>
+    <string name="instruction_3">3. Grant root permissions to Pixel Taskbar Enabler from your
+        manager, either <a href="https://github.com/tiann/KernelSU">KernelSU</a> or <a
+            href="https://github.com/topjohnwu/Magisk">Magisk</a>.</string>
+    <string name="instruction_4">4. Turn on the switch above to enable the Taskbar and Enjoy!</string>
+
+    <!-- Toast & Log Messages -->
+    <string name="logs_cleared">Logs cleared</string>
+    <string name="taskbar_enabled">Taskbar enabled</string>
+    <string name="taskbar_disabled">Taskbar disabled</string>
+    <string name="icon_scale_saved">Icon scale saved: %1$d%%</string>
+    <string name="header_scale_saved">Header scale saved: %1$d%%</string>
+    <string name="mobile_recents_enabled">Mobile Recents enabled</string>
+    <string name="mobile_recents_disabled">Mobile Recents disabled</string>
+
+    <string name="icon_changed_default">Icon changed to: Default (The change may take a few seconds)</string>
+    <string name="icon_changed_themed">Icon changed to: Themed (The change may take a few seconds)</string>
+    <string name="icon_changed_monochrome">Icon changed to: Monochrome (The change may take a few
+        seconds)</string>
+
+    <string name="restarting_launcher">Restarting Launcher…</string>
+    <string name="launcher_restarted_success">Launcher restarted successfully.</string>
+    <string name="error_root_denied">Error: Root permissions denied.</string>
+
+</resources>

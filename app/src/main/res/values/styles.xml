@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<style name="TextAppearance.App.ListItem.Title" parent="TextAppearance.AppCompat.Subhead">
+		<item name="android:textSize">19sp</item> <!--
+		A12 B2: 20sp -->
+	</style>
+
+	<style name="Widget.ExtendedFloatingActionButton"
+		parent="Widget.Material3.ExtendedFloatingActionButton.Primary">
+		<item name="shapeAppearanceOverlay">@style/ShapeAppearanceExtFAB</item>
+	</style>
+
+	<style name="ShapeAppearanceExtFAB">
+		<item name="cornerFamily">rounded</item>
+		<item name="cornerSize">@dimen/ui_container_radius</item>
+	</style>
+
+	<style name="MaterialComponents.MaterialAlertDialog"
+		parent="ThemeOverlay.Material3.MaterialAlertDialog">
+		<item name="android:background">?attr/colorSurfaceContainer</item>
+		<item name="android:dialogCornerRadius">@dimen/ui_container_radius</item>
+		<item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.Title.Text
+		</item>
+		<item name="materialAlertDialogBodyTextStyle">@style/MaterialAlertDialog.Body.Text
+		</item>
+		<item name="buttonBarPositiveButtonStyle">@style/MaterialAlertDialog.Button.Text
+		</item>
+		<item name="buttonBarNegativeButtonStyle">@style/MaterialAlertDialog.Button.Text
+		</item>
+		<item name="android:backgroundDimAmount">0.6</item>
+	</style>
+
+	<style name="MaterialAlertDialog.Title.Text"
+		parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+		<item name="android:background">?attr/colorSurfaceContainer</item>
+		<item name="android:textSize">20sp</item>
+		<item name="android:fontFamily">sans-serif-medium</item>
+	</style>
+
+	<style name="MaterialAlertDialog.Body.Text"
+		parent="MaterialAlertDialog.MaterialComponents.Body.Text">
+		<item name="android:background">?attr/colorSurfaceContainer</item>
+		<item name="android:textSize">14sp</item>
+		<item name="android:fontFamily">sans-serif</item>
+	</style>
+
+	<style name="MaterialAlertDialog.Button.Text" parent="Widget.Material3.Button.TextButton.Dialog">
+		<item name="android:backgroundTint">?attr/colorSurfaceContainer</item>
+		<item name="android:foreground">?attr/selectableItemBackground</item>
+		<item name="android:textSize">16sp</item>
+		<item name="android:fontFamily">sans-serif-medium</item>
+	</style>
+
+	<style name="PopupMenu" parent="@android:style/Widget.PopupMenu">
+		<item name="android:popupBackground">?attr/colorSurfaceContainerHighest</item>
+	</style>
+
+	<style name="ShapeAppearance.MyApp.FAB50dp" parent="">
+		<item name="cornerFamily">rounded</item>
+		<item name="cornerSize">50dp</item>
+	</style>
+
+	<style name="ShapeAppearance.MyApp.ListItem.Top" parent="">
+		<item name="cornerFamily">rounded</item>
+		<item name="cornerSizeTopRight">24dp</item>
+		<item name="cornerSizeTopLeft">24dp</item>
+		<item name="cornerSizeBottomRight">4dp</item>
+		<item name="cornerSizeBottomLeft">4dp</item>
+	</style>
+
+	<style name="ShapeAppearance.MyApp.ListItem.Middle" parent="">
+		<item name="cornerFamily">rounded</item>
+		<item name="cornerSize">4dp</item>
+	</style>
+
+	<style name="ShapeAppearance.MyApp.ListItem.Bottom" parent="">
+		<item name="cornerFamily">rounded</item>
+		<item name="cornerSizeTopRight">4dp</item>
+		<item name="cornerSizeTopLeft">4dp</item>
+		<item name="cornerSizeBottomRight">24dp</item>
+		<item name="cornerSizeBottomLeft">24dp</item>
+	</style>
+
+	<style name="ThemeOverlay.App.BottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
+		<item name="bottomSheetStyle">@style/Widget.App.BottomSheet</item>
+		<item name="android:backgroundDimAmount">0.5</item>
+	</style>
+
+	<style name="Widget.App.BottomSheet" parent="Widget.Material3.BottomSheet">
+		<item name="backgroundTint">?attr/colorSurfaceContainer</item>
+	</style>
+
+</resources>

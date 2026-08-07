@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Details -->
+    <string name="app_name">Pixel Taskbar Enabler</string>
+    <string name="app_description">Activa la barra de tareas (estilo tablet) en teléfonos Pixel.</string>
+    <string name="author">beyman.dev</string>
+    <string name="based_on_text">siavash79/PixelXpert</string>
+
+    <!-- MainActivity Tabs & Titles -->
+    <string name="taskbar_settings">Configuración de Taskbar</string>
+    <string name="recents_settings">Configuración de Recientes</string>
+
+    <!-- Switches & Settings -->
+    <string name="enable_taskbar">Habilitar Android Taskbar</string>
+    <string name="enable_taskbar_desc">Activa o desactiva la barra nativa</string>
+    <string name="force_mobile_recents">Forzar Recientes en Móvil</string>
+    <string name="force_mobile_recents_desc">Usa el diseño de recientes tipo tablet</string>
+    <string name="icon_count_desc">Número máximo de aplicaciones en el dock</string>
+    <string name="icon_scale_desc">Ajusta el tamaño de los iconos del dock</string>
+    <string name="grid_header_scale_desc">Modifica el tamaño en la vista de recientes</string>
+
+    <!-- Formatted Labels -->
+    <string name="icon_scale_label_format">Escala de Iconos: %1$d%%</string>
+    <string name="grid_header_scale_label_format">Escala de Encabezados (Grid): %1$d%%</string>
+    <string name="taskbar_icon_count_label_format">Cantidad de Iconos: %1$d</string>
+
+    <!-- Buttons -->
+    <string name="apply_changes">Aplicar Cambios</string>
+    <string name="apply_changes_desc">Aplicar cambios</string>
+    <string name="undo">Deshacer</string>
+    <string name="redo">Rehacer</string>
+
+    <string name="btn_settings">Ajustes</string>
+    <string name="btn_logs">Logs</string>
+    <string name="btn_instructions">Instrucciones</string>
+    <string name="btn_about">Acerca de</string>
+
+    <!-- Dialog Settings -->
+    <string name="language">Idioma</string>
+    <string name="lang_system">Predeterminado del sistema</string>
+    <string name="lang_english">English</string>
+    <string name="lang_spanish">Español</string>
+    <string name="lang_changed">Idioma cambiado.</string>
+    <string name="categories">Categorías</string>
+    <string name="app_icon">Icono de la aplicación</string>
+    <string name="icon_default">Icono por defecto</string>
+    <string name="icon_themed">Icono Temático</string>
+    <string name="icon_monochrome">Icono Monocromo</string>
+
+    <!-- Bottom Sheet Logs -->
+    <string name="log_history">Historial de Logs</string>
+    <string name="no_logs">No hay logs</string>
+    <string name="clear_logs">Limpiar Logs</string>
+
+    <!-- Bottom Sheet About -->
+    <string name="about">Acerca de</string>
+    <string name="about_desc">Una utilidad rápida y eficiente diseñada para habilitar la barra de
+        tareas (Taskbar) en el launcher nativo de dispositivos Pixel, adaptando la experiencia de
+        tablets a tu móvil.</string>
+    <string name="key_features">Características Clave</string>
+    <string name="website">Sitio web</string>
+    <string name="credits_title">Créditos y Agradecimientos</string>
+    <string name="credits_intro">Este proyecto es posible gracias a las siguientes contribuciones de código abierto y equipos:</string>
+    <string name="credit_pixelxpert_desc">PixelXpert / AOSPMods: Equipo original (@siavash79 &amp; @ElTifo) de donde se tomó inspiración y código base.</string>
+    <string name="credit_xposed_desc">XposedBridge: La creación original de Xposed por @rovo89.</string>
+    <string name="credit_vector_desc">Vector: El equipo de Vector (LSPosed) por mantener el entorno vivo.</string>
+    <string name="credit_google_desc">Google &amp; Android: El sistema operativo Android y el equipo de Google.</string>
+
+    <string name="feature_1">Activación de la Taskbar sin modificar el DPI global.</string>
+    <string name="feature_2">Personalización de la escala de íconos y carpetas.</string>
+    <string name="feature_3">Control sobre la cantidad de aplicaciones en el dock.</string>
+    <string name="feature_4">Forzar el estilo de Recientes tipo tablet en móviles.</string>
+
+    <!-- Bottom Sheet Instructions -->
+    <string name="instructions">Instrucciones</string>
+    <string name="instruction_0"><b>Prerrequisitos:</b>\n&#8226; Dispositivo Pixel rooteado (Magisk, KernelSU)\n&#8226; Entorno Zygisk activo\n&#8226; Entorno Xposed instalado (LSPosed, Vector, etc.)</string>
+    <string name="instruction_1">1. Abre Xposed (<a href="https://github.com/JingMatrix/Vector">JingMatrix/Vector</a>), activa el módulo y asegúrate de que \'Pixel Launcher\' esté marcado.</string>
+    <string name="instruction_2">2. Asegúrate de tener un entorno Zygisk (ej. <a
+            href="https://github.com/JingMatrix/NeoZygisk">NeoZygisk</a>).</string>
+    <string name="instruction_3">3. Concede permisos de root a Pixel Taskbar Enabler desde tu
+        gestor, ya sea <a href="https://github.com/tiann/KernelSU">KernelSU</a> o <a
+            href="https://github.com/topjohnwu/Magisk">Magisk</a>.</string>
+    <string name="instruction_4">4. Activa el interruptor de arriba para habilitar el Taskbar ¡y
+        Disfruta!</string>
+
+    <!-- Toast & Log Messages -->
+    <string name="logs_cleared">Logs limpiados</string>
+    <string name="taskbar_enabled">Taskbar habilitada</string>
+    <string name="taskbar_disabled">Taskbar deshabilitada</string>
+    <string name="icon_scale_saved">Escala de iconos guardada: %1$d%%</string>
+    <string name="header_scale_saved">Escala de encabezados guardada: %1$d%%</string>
+    <string name="mobile_recents_enabled">Modo Móvil en Recientes habilitado</string>
+    <string name="mobile_recents_disabled">Modo Móvil en Recientes deshabilitado</string>
+
+    <string name="icon_changed_default">Icono cambiado a: Por defecto (El cambio puede tardar unos
+        segundos)</string>
+    <string name="icon_changed_themed">Icono cambiado a: Temático (El cambio puede tardar unos
+        segundos)</string>
+    <string name="icon_changed_monochrome">Icono cambiado a: Monocromo (El cambio puede tardar unos
+        segundos)</string>
+
+    <string name="restarting_launcher">Reiniciando Launcher…</string>
+    <string name="launcher_restarted_success">Launcher reiniciado con éxito.</string>
+    <string name="error_root_denied">Error: Permisos Root no concedidos.</string>
+
+</resources>

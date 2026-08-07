@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools">
+
+
+	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	<uses-permission
+		android:name="android.permission.QUERY_ALL_PACKAGES"
+		tools:ignore="QueryAllPackagesPermission" />
+
+	<application
+		android:name=".PixelTaskbarEnabler"
+		android:enableOnBackInvokedCallback="true"
+		android:forceQueryable="true"
+		android:icon="@mipmap/ic_launcher"
+		android:label="Pixel Taskbar Enabler (beyman.dev)"
+		android:description="@string/app_description"
+		android:supportsRtl="true"
+		android:theme="@style/AppTheme.PixelTaskbarEnabler.SplashScreen">
+		<meta-data
+			android:name="xposedmodule"
+			android:value="true" />
+		<meta-data
+			android:name="xposeddescription"
+			android:value="@string/app_description" />
+		<meta-data
+			android:name="xposedminversion"
+			android:value="93" />
+
+		<activity
+			android:name=".MainActivity"
+			android:exported="true"
+			android:label="Pixel Taskbar Enabler (beyman.dev)"
+			android:theme="@style/AppTheme.PixelTaskbarEnabler.SplashScreen">
+		</activity>
+
+		<activity-alias
+			android:name=".MainActivityDefault"
+			android:targetActivity=".MainActivity"
+			android:icon="@mipmap/ic_launcher"
+			android:label="Pixel Taskbar Enabler (beyman.dev)"
+			android:exported="true"
+			android:enabled="true">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity-alias>
+
+		<activity-alias
+			android:name=".MainActivityThemed"
+			android:targetActivity=".MainActivity"
+			android:icon="@mipmap/ic_launcher_themed"
+			android:label="Pixel Taskbar Enabler (beyman.dev)"
+			android:exported="true"
+			android:enabled="false">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity-alias>
+
+		<activity-alias
+			android:name=".MainActivityMono"
+			android:targetActivity=".MainActivity"
+			android:icon="@mipmap/ic_launcher_mono"
+			android:label="Pixel Taskbar Enabler (beyman.dev)"
+			android:exported="true"
+			android:enabled="false">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity-alias>
+
+
+		<provider
+			android:name=".utils.RemotePrefProvider"
+			android:authorities="${applicationId}"
+			android:directBootAware="true"
+			android:exported="true"
+			tools:ignore="ExportedContentProvider" />
+
+	</application>
+
+</manifest>

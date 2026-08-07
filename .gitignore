@@ -1,0 +1,52 @@
+# IntelliJ IDEA
+*.iml
+*.iws
+/.idea/*
+
+# Gradle files
+.gradle
+.gradle/
+/build
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Android Studio
+/*/build/
+/*/local.properties
+/*/out
+/*/*/build
+/*/*/production
+/captures
+.navigation/
+.DS_Store
+*.ipr
+*~
+*.swp
+.cxx
+
+# External native build folder generated in Android Studio 2.2 and later
+.externalNativeBuild
+
+# Keystore files
+*.jks
+*.keystore
+/keystore.properties
+
+# Generated APK files
+/app/debug/
+/app/release/
+/crowdin.properties
+/ReleaseKey.properties
+/.kotlin
+/.idea/
+NexusLauncher/
+jadx/
+NexusLauncher.apk
+NexusLauncher.zip
+Pixel Launcher.apk
+jadx.zip
+isTablet_search.txt
+dp.txt
+jadx_out_pixel/
+RELEASING.md

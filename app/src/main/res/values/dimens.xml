@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="ui_container_radius">18dp</dimen>
+
+	<!-- Extended Floating Action Button -->
+	<dimen name="fab_expanded_corner_radius">28dp</dimen>
+</resources>
