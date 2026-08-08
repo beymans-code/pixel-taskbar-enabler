@@ -4,6 +4,10 @@
 
 **Un módulo Xposed de alto rendimiento para habilitar la barra de tareas en dispositivos Pixel**
 
+<p align="center">
+  <img src="PXTE%20beyman-dev.png" alt="Pixel Taskbar Enabler" width="500" />
+</p>
+
 
 [![Download](https://img.shields.io/github/v/release/beymans-code/pixel-taskbar-enabler?color=orange&logoColor=orange&label=Download&logo=DocuSign)](https://github.com/beymans-code/pixel-taskbar-enabler/releases/latest)
 [![Total](https://img.shields.io/github/downloads/beymans-code/pixel-taskbar-enabler/total?logo=Bookmeter&label=Counts&logoColor=yellow&color=yellow)](https://github.com/beymans-code/pixel-taskbar-enabler/releases)
