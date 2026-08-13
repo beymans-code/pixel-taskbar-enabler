@@ -1,16 +1,11 @@
-<details>
-<summary>🇨🇴 🙏 <b>The affected regions in Colombia need us | Colombia nos necesita (Expand)</b></summary>
-<br>
-
-**[EN]** Pixel Taskbar Enabler is free. However, Colombia, my country, recently suffered a devastating earthquake. The most vulnerable communities in the Pacific (Chocó, Buenaventura) and Andean regions **need us**. If this project helps you, please consider donating through the <a href="https://www.cruzrojacolombiana.org/">Colombian Red Cross</a> **or any official organization**. *Feel free to research this crisis independently. Thank you for your attention.*
-
-<br>
-
-**[ES]** Pixel Taskbar Enabler es gratuito. Sin embargo, Colombia, mi país, acaba de sufrir un devastador terremoto. Las comunidades más vulnerables del Pacífico (Chocó, Buenaventura) y la región Andina **nos necesitan**. Si este proyecto te sirve, considera donar a través de la <a href="https://www.cruzrojacolombiana.org/">Cruz Roja Colombiana</a> **o cualquier entidad oficial**. *Te invito a investigar sobre esta emergencia por tu cuenta. Gracias por tu atención.*
-
-</details>
+> 🇨🇴 🙏 **Colombia needs us / Colombia nos necesita** ❤️
+> 
+> **[EN]** Pixel Taskbar Enabler is free. However, Colombia, my country, recently suffered a devastating earthquake. The most vulnerable communities in the **Pacific** (including **Chocó**, **Buenaventura**, and others) and parts of the **Andean region** **need us**. If you value this module, please consider supporting through **any official organization or verified donation site**. *Feel free to research this crisis independently. Thank you for your attention.*
+>
+> **[ES]** Pixel Taskbar Enabler es gratuito. Sin embargo, Colombia, mi país, acaba de sufrir un devastador terremoto. Las comunidades más vulnerables del **Pacífico** (incluyendo **Chocó**, **Buenaventura** y otras) y parte de la **región Andina** **nos necesitan**. Si valoras este módulo, considera apoyar a través de **cualquier entidad oficial o sitio de donación verificado**. *Te invito a investigar sobre esta emergencia por tu cuenta. Gracias por tu atención.*
 
 ---
+
 
 
 <div align="center">
