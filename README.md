@@ -1,3 +1,18 @@
+<details>
+<summary>🇨🇴 🙏 <b>The affected regions in Colombia need us | Colombia nos necesita (Expand)</b></summary>
+<br>
+
+**[EN]** Pixel Taskbar Enabler is free. However, Colombia, my country, recently suffered a devastating earthquake. The most vulnerable communities in the Pacific (Chocó, Buenaventura) and Andean regions **need us**. If this project helps you, please consider donating through the <a href="https://www.cruzrojacolombiana.org/">Colombian Red Cross</a> **or any official organization**. *Feel free to research this crisis independently. Thank you for your attention.*
+
+<br>
+
+**[ES]** Pixel Taskbar Enabler es gratuito. Sin embargo, Colombia, mi país, acaba de sufrir un devastador terremoto. Las comunidades más vulnerables del Pacífico (Chocó, Buenaventura) y la región Andina **nos necesitan**. Si este proyecto te sirve, considera donar a través de la <a href="https://www.cruzrojacolombiana.org/">Cruz Roja Colombiana</a> **o cualquier entidad oficial**. *Te invito a investigar sobre esta emergencia por tu cuenta. Gracias por tu atención.*
+
+</details>
+
+---
+
+
 <div align="center">
 
 ### 🌍 Select your language / Selecciona tu idioma
@@ -8,14 +23,8 @@
 
 </div>
 
-<br>
-<br>
-<br>
-
 ---
 
-<br>
-<br>
 <br>
 
 <a id="english"></a>
