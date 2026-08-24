@@ -1,5 +1,4 @@
 
-import com.android.build.api.artifact.SingleArtifact
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.util.Properties
@@ -22,10 +21,10 @@ android {
 
 	defaultConfig {
 		applicationId = "dev.beyman.pixeltaskbarenabler"
-		minSdk = 36
+		minSdk = 35
 		targetSdk = 36
-		versionCode = 1
-		versionName = "1.0.0"
+		versionCode = 2
+		versionName = "1.0.1"
 		ndk {
 			//noinspection ChromeOsAbiSupport
 			abiFilters.add("arm64-v8a")

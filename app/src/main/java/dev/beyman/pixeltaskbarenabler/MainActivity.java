@@ -113,7 +113,8 @@ public class MainActivity extends AppCompatActivity {
         if (btnUndo != null) {
             btnUndo.setOnClickListener(v -> {
                 if (!undoStack.isEmpty()) {
-                    redoStack.push(getCurrentState());
+                    if (currentUIState == null) currentUIState = getUiState();
+                    redoStack.push(currentUIState);
                     applyState(undoStack.pop());
                 }
             });
@@ -122,7 +123,8 @@ public class MainActivity extends AppCompatActivity {
         if (btnRedo != null) {
             btnRedo.setOnClickListener(v -> {
                 if (!redoStack.isEmpty()) {
-                    undoStack.push(getCurrentState());
+                    if (currentUIState == null) currentUIState = getUiState();
+                    undoStack.push(currentUIState);
                     applyState(redoStack.pop());
                 }
             });
@@ -260,6 +262,10 @@ public class MainActivity extends AppCompatActivity {
         taskbarIconCountLabel.setText(getString(R.string.taskbar_icon_count_label_format, currentIconCount));
         taskbarIconCountSlider.setEnabled(isEnabled);
 
+        setupSliderTouchInterception(iconScaleSlider);
+        setupSliderTouchInterception(gridHeaderScaleSlider);
+        setupSliderTouchInterception(taskbarIconCountSlider);
+
         taskbarSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             vibrate(buttonView, VibrateType.CLOCK_TICK);
             if (isRestoringState) return;
@@ -274,12 +280,8 @@ public class MainActivity extends AppCompatActivity {
             boolean currentlyEnabled = "1".equals(currentVal);
             if (isChecked != currentlyEnabled) {
                 setButtonEnabled(true);
-            } else {
-                if (!undoStack.isEmpty()) {
-                    undoStack.pop();
-                    updateUndoRedoButtons();
-                }
             }
+            updateCurrentUIState();
         });
 
         iconScaleSlider.addOnChangeListener((slider, value, fromUser) -> {
@@ -300,12 +302,8 @@ public class MainActivity extends AppCompatActivity {
                 int currentVal = prefsProtected.getInt("taskbar_icon_scale", 85);
                 if (val != currentVal) {
                     setButtonEnabled(true);
-                } else {
-                    if (!undoStack.isEmpty()) {
-                        undoStack.pop();
-                        updateUndoRedoButtons();
-                    }
                 }
+                updateCurrentUIState();
             }
         });
 
@@ -327,12 +325,8 @@ public class MainActivity extends AppCompatActivity {
                 int currentVal = prefsProtected.getInt("grid_header_scale", 70);
                 if (val != currentVal) {
                     setButtonEnabled(true);
-                } else {
-                    if (!undoStack.isEmpty()) {
-                        undoStack.pop();
-                        updateUndoRedoButtons();
-                    }
                 }
+                updateCurrentUIState();
             }
         });
 
@@ -354,12 +348,8 @@ public class MainActivity extends AppCompatActivity {
                 int currentVal = prefsProtected.getInt("taskbar_icon_count", 4);
                 if (val != currentVal) {
                     setButtonEnabled(true);
-                } else {
-                    if (!undoStack.isEmpty()) {
-                        undoStack.pop();
-                        updateUndoRedoButtons();
-                    }
                 }
+                updateCurrentUIState();
             }
         });
 
@@ -371,12 +361,8 @@ public class MainActivity extends AppCompatActivity {
             boolean currentVal = prefsProtected.getBoolean("mobile_recents", false);
             if (isChecked != currentVal) {
                 setButtonEnabled(true);
-            } else {
-                if (!undoStack.isEmpty()) {
-                    undoStack.pop();
-                    updateUndoRedoButtons();
-                }
             }
+            updateCurrentUIState();
         });
 
         // Accordeons have been removed in favor of static cards.
@@ -410,49 +396,47 @@ public class MainActivity extends AppCompatActivity {
         }
 
         updateHeaderIcon();
+        currentUIState = getUiState();
     }
 
     // =========================================================================
     // MARK: STATE MANAGEMENT & UNDO/REDO LOGIC
     // =========================================================================
 
-    private SettingsState getCurrentState() {
+    private SettingsState currentUIState;
+
+    private SettingsState getUiState() {
+        MaterialSwitch taskbarSwitch = findViewById(R.id.taskbar_switch);
+        MaterialSwitch mobileRecentsSwitch = findViewById(R.id.mobile_recents_switch);
+        com.google.android.material.slider.Slider iconScaleSlider = findViewById(R.id.icon_scale_slider);
+        com.google.android.material.slider.Slider gridHeaderScaleSlider = findViewById(R.id.grid_header_scale_slider);
+        com.google.android.material.slider.Slider taskbarIconCountSlider = findViewById(R.id.taskbar_icon_count_slider);
+
         return new SettingsState(
-            prefsProtected.getString("taskBarMode", "0"),
-            prefsProtected.getBoolean("mobile_recents", false),
-            prefsProtected.getInt("taskbar_icon_scale", 85),
-            prefsProtected.getInt("grid_header_scale", 70),
-            prefsProtected.getInt("taskbar_icon_count", 4)
+            taskbarSwitch != null && taskbarSwitch.isChecked() ? "1" : "0",
+            mobileRecentsSwitch != null && mobileRecentsSwitch.isChecked(),
+            iconScaleSlider != null ? (int) iconScaleSlider.getValue() : 85,
+            gridHeaderScaleSlider != null ? (int) gridHeaderScaleSlider.getValue() : 70,
+            taskbarIconCountSlider != null ? (int) taskbarIconCountSlider.getValue() : 4
         );
     }
 
     private void saveStateForUndo() {
         if (isRestoringState) return;
-        if (prefsProtected != null) {
-            undoStack.push(getCurrentState());
-            redoStack.clear();
-            updateUndoRedoButtons();
+        if (currentUIState == null) currentUIState = getUiState();
+        undoStack.push(currentUIState);
+        redoStack.clear();
+        updateUndoRedoButtons();
+    }
+
+    private void updateCurrentUIState() {
+        if (!isRestoringState) {
+            currentUIState = getUiState();
         }
     }
 
     private void applyState(SettingsState state) {
         isRestoringState = true;
-
-        prefsNormal.edit()
-            .putString("taskBarMode", state.taskBarMode)
-            .putBoolean("mobile_recents", state.mobileRecents)
-            .putInt("taskbar_icon_scale", state.taskbarIconScale)
-            .putInt("grid_header_scale", state.gridHeaderScale)
-            .putInt("taskbar_icon_count", state.taskbarIconCount)
-            .apply();
-
-        prefsProtected.edit()
-            .putString("taskBarMode", state.taskBarMode)
-            .putBoolean("mobile_recents", state.mobileRecents)
-            .putInt("taskbar_icon_scale", state.taskbarIconScale)
-            .putInt("grid_header_scale", state.gridHeaderScale)
-            .putInt("taskbar_icon_count", state.taskbarIconCount)
-            .apply();
 
         MaterialSwitch taskbarSwitch = findViewById(R.id.taskbar_switch);
         MaterialSwitch mobileRecentsSwitch = findViewById(R.id.mobile_recents_switch);
@@ -461,44 +445,29 @@ public class MainActivity extends AppCompatActivity {
         com.google.android.material.slider.Slider taskbarIconCountSlider = findViewById(R.id.taskbar_icon_count_slider);
 
         boolean isEnabled = "1".equals(state.taskBarMode);
-        taskbarSwitch.setChecked(isEnabled);
-        mobileRecentsSwitch.setChecked(state.mobileRecents);
-        mobileRecentsSwitch.setEnabled(isEnabled);
+        if (taskbarSwitch != null) taskbarSwitch.setChecked(isEnabled);
+        if (mobileRecentsSwitch != null) {
+            mobileRecentsSwitch.setChecked(state.mobileRecents);
+            mobileRecentsSwitch.setEnabled(isEnabled);
+        }
 
-        iconScaleSlider.setValue(state.taskbarIconScale);
-        iconScaleSlider.setEnabled(isEnabled);
+        if (iconScaleSlider != null) {
+            iconScaleSlider.setValue(state.taskbarIconScale);
+            iconScaleSlider.setEnabled(isEnabled);
+        }
 
-        gridHeaderScaleSlider.setValue(state.gridHeaderScale);
-        gridHeaderScaleSlider.setEnabled(isEnabled);
+        if (gridHeaderScaleSlider != null) {
+            gridHeaderScaleSlider.setValue(state.gridHeaderScale);
+            gridHeaderScaleSlider.setEnabled(isEnabled);
+        }
 
-        taskbarIconCountSlider.setValue(state.taskbarIconCount);
-        taskbarIconCountSlider.setEnabled(isEnabled);
+        if (taskbarIconCountSlider != null) {
+            taskbarIconCountSlider.setValue(state.taskbarIconCount);
+            taskbarIconCountSlider.setEnabled(isEnabled);
+        }
 
+        currentUIState = state;
         isRestoringState = false;
-
-
-        FloatingActionButton btnApplyChanges = findViewById(R.id.btnApplyChanges);
-
-        View btnUndo = findViewById(R.id.btnUndo);
-        View btnRedo = findViewById(R.id.btnRedo);
-
-        if (btnUndo != null) {
-            btnUndo.setOnClickListener(v -> {
-                if (!undoStack.isEmpty()) {
-                    redoStack.push(getCurrentState());
-                    applyState(undoStack.pop());
-                }
-            });
-        }
-
-        if (btnRedo != null) {
-            btnRedo.setOnClickListener(v -> {
-                if (!redoStack.isEmpty()) {
-                    undoStack.push(getCurrentState());
-                    applyState(redoStack.pop());
-                }
-            });
-        }
 
         setButtonEnabled(true);
         updateUndoRedoButtons();
@@ -573,7 +542,7 @@ public class MainActivity extends AppCompatActivity {
 
         updateHeaderIcon();
 
-        // Restart app to apply icon changes safely without being killed by the OS unexpectedly
+        // MARK: Restart app to apply icon changes safely without being killed by the OS unexpectedly
         android.os.Handler handler = new android.os.Handler(android.os.Looper.getMainLooper());
         handler.postDelayed(() -> {
             android.content.Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
@@ -582,7 +551,7 @@ public class MainActivity extends AppCompatActivity {
             }
             intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            overrideActivityTransition(android.app.Activity.OVERRIDE_TRANSITION_OPEN, android.R.anim.fade_in, android.R.anim.fade_out);
             finishAffinity();
         }, 1000);
     }
@@ -917,5 +886,67 @@ public class MainActivity extends AppCompatActivity {
         btnUndo.setImageTintList(ColorStateList.valueOf(btnUndoColor));
         btnRedo.setBackgroundTintList(ColorStateList.valueOf(btnRedoBackground));
         btnRedo.setImageTintList(ColorStateList.valueOf(btnRedoColor));
+    }
+
+    @android.annotation.SuppressLint("ClickableViewAccessibility")
+    private void setupSliderTouchInterception(com.google.android.material.slider.Slider slider) {
+        slider.setOnTouchListener(new android.view.View.OnTouchListener() {
+            private float startX;
+            private float startY;
+            private int touchSlop = android.view.ViewConfiguration.get(slider.getContext()).getScaledTouchSlop();
+            private boolean isDragging = false;
+
+            @Override
+            public boolean onTouch(android.view.View v, android.view.MotionEvent event) {
+                int action = event.getActionMasked();
+                switch (action) {
+                    case android.view.MotionEvent.ACTION_DOWN:
+                        startX = event.getX();
+                        startY = event.getY();
+                        isDragging = false;
+                        return true; // Consume down to prevent instant snap
+
+                    case android.view.MotionEvent.ACTION_MOVE:
+                        if (!isDragging) {
+                            float dx = Math.abs(event.getX() - startX);
+                            float dy = Math.abs(event.getY() - startY);
+                            
+                            if (dx > touchSlop && dx > dy) {
+                                // It's a horizontal drag
+                                isDragging = true;
+                                v.getParent().requestDisallowInterceptTouchEvent(true);
+                                
+                                // Synthesize ACTION_DOWN for the slider
+                                android.view.MotionEvent downEvent = android.view.MotionEvent.obtain(event);
+                                downEvent.setAction(android.view.MotionEvent.ACTION_DOWN);
+                                v.onTouchEvent(downEvent);
+                                downEvent.recycle();
+                            }
+                        }
+                        
+                        if (isDragging) {
+                            v.onTouchEvent(event);
+                        }
+                        return true;
+
+                    case android.view.MotionEvent.ACTION_UP:
+                    case android.view.MotionEvent.ACTION_CANCEL:
+                        if (isDragging) {
+                            v.onTouchEvent(event);
+                            v.getParent().requestDisallowInterceptTouchEvent(false);
+                        } else if (action == android.view.MotionEvent.ACTION_UP) {
+                            // It was a click!
+                            android.view.MotionEvent downEvent = android.view.MotionEvent.obtain(event);
+                            downEvent.setAction(android.view.MotionEvent.ACTION_DOWN);
+                            v.onTouchEvent(downEvent);
+                            downEvent.recycle();
+                            v.onTouchEvent(event);
+                        }
+                        isDragging = false;
+                        return true;
+                }
+                return false;
+            }
+        });
     }
 }
