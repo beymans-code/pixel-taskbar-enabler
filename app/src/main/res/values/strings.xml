@@ -18,10 +18,12 @@
     <string name="force_mobile_recents_desc">Uses the tablet-style recents layout</string>
     <string name="icon_count_desc">Maximum number of apps in the dock</string>
     <string name="icon_scale_desc">Adjusts the dock icon size</string>
+    <string name="taskbar_scale_desc">Adjusts the overall taskbar size</string>
     <string name="grid_header_scale_desc">Modifies the size in the recents view</string>
 
     <!-- Formatted Labels -->
     <string name="icon_scale_label_format">Icon Scale: %1$d%%</string>
+    <string name="taskbar_scale_label_format">Taskbar Scale: %1$d%%</string>
     <string name="grid_header_scale_label_format">Grid Header Scale: %1$d%%</string>
     <string name="taskbar_icon_count_label_format">Icon Count: %1$d</string>
 
@@ -90,6 +92,7 @@
     <string name="taskbar_enabled">Taskbar enabled</string>
     <string name="taskbar_disabled">Taskbar disabled</string>
     <string name="icon_scale_saved">Icon scale saved: %1$d%%</string>
+    <string name="taskbar_scale_saved">Taskbar scale saved: %1$d%%</string>
     <string name="header_scale_saved">Header scale saved: %1$d%%</string>
     <string name="mobile_recents_enabled">Mobile Recents enabled</string>
     <string name="mobile_recents_disabled">Mobile Recents disabled</string>

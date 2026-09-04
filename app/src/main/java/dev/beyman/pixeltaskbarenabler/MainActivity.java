@@ -33,13 +33,15 @@ public class MainActivity extends AppCompatActivity {
         String taskBarMode;
         boolean mobileRecents;
         int taskbarIconScale;
+        int taskbarScale;
         int gridHeaderScale;
         int taskbarIconCount;
 
-        SettingsState(String taskBarMode, boolean mobileRecents, int taskbarIconScale, int gridHeaderScale, int taskbarIconCount) {
+        SettingsState(String taskBarMode, boolean mobileRecents, int taskbarIconScale, int taskbarScale, int gridHeaderScale, int taskbarIconCount) {
             this.taskBarMode = taskBarMode;
             this.mobileRecents = mobileRecents;
             this.taskbarIconScale = taskbarIconScale;
+            this.taskbarScale = taskbarScale;
             this.gridHeaderScale = gridHeaderScale;
             this.taskbarIconCount = taskbarIconCount;
         }
@@ -136,17 +138,20 @@ public class MainActivity extends AppCompatActivity {
             MaterialSwitch currentTaskbarSwitch = findViewById(R.id.taskbar_switch);
             MaterialSwitch currentMobileRecentsSwitch = findViewById(R.id.mobile_recents_switch);
             com.google.android.material.slider.Slider currentIconScaleSlider = findViewById(R.id.icon_scale_slider);
+            com.google.android.material.slider.Slider currentTaskbarScaleSlider = findViewById(R.id.taskbar_scale_slider);
             com.google.android.material.slider.Slider currentGridHeaderScaleSlider = findViewById(R.id.grid_header_scale_slider);
             com.google.android.material.slider.Slider currentTaskbarIconCountSlider = findViewById(R.id.taskbar_icon_count_slider);
 
             String oldTaskBarMode = prefsProtected.getString("taskBarMode", "0");
-            int oldIconScale = prefsProtected.getInt("taskbar_icon_scale", 85);
+            int oldIconScale = prefsProtected.getInt("taskbar_icon_scale", 100);
+            int oldTaskbarScale = prefsProtected.getInt("taskbar_scale", 100);
             int oldHeaderScale = prefsProtected.getInt("grid_header_scale", 70);
             int oldIconCount = prefsProtected.getInt("taskbar_icon_count", 4);
             boolean oldMobileRecents = prefsProtected.getBoolean("mobile_recents", false);
 
             String newTaskBarMode = currentTaskbarSwitch.isChecked() ? "1" : "0";
             int newIconScale = (int) currentIconScaleSlider.getValue();
+            int newTaskbarScale = (int) currentTaskbarScaleSlider.getValue();
             int newHeaderScale = (int) currentGridHeaderScaleSlider.getValue();
             int newIconCount = (int) currentTaskbarIconCountSlider.getValue();
             boolean newMobileRecents = currentMobileRecentsSwitch.isChecked();
@@ -166,6 +171,13 @@ public class MainActivity extends AppCompatActivity {
                 editorNormal.putInt("taskbar_icon_scale", newIconScale);
                 editorProtected.putInt("taskbar_icon_scale", newIconScale);
                 logMessage(R.string.icon_scale_saved, newIconScale);
+                changed = true;
+            }
+
+            if (newTaskbarScale != oldTaskbarScale) {
+                editorNormal.putInt("taskbar_scale", newTaskbarScale);
+                editorProtected.putInt("taskbar_scale", newTaskbarScale);
+                logMessage(R.string.taskbar_scale_saved, newTaskbarScale);
                 changed = true;
             }
 
@@ -243,10 +255,17 @@ public class MainActivity extends AppCompatActivity {
 
         com.google.android.material.slider.Slider iconScaleSlider = findViewById(R.id.icon_scale_slider);
         TextView iconScaleLabel = findViewById(R.id.icon_scale_label);
-        int currentScale = prefsProtected.getInt("taskbar_icon_scale", 85);
+        int currentScale = prefsProtected.getInt("taskbar_icon_scale", 100);
         iconScaleSlider.setValue(currentScale);
         iconScaleLabel.setText(getString(R.string.icon_scale_label_format, currentScale));
         iconScaleSlider.setEnabled(isEnabled);
+
+        com.google.android.material.slider.Slider taskbarScaleSlider = findViewById(R.id.taskbar_scale_slider);
+        TextView taskbarScaleLabel = findViewById(R.id.taskbar_scale_label);
+        int currentTaskbarScale = prefsProtected.getInt("taskbar_scale", 100);
+        taskbarScaleSlider.setValue(currentTaskbarScale);
+        taskbarScaleLabel.setText(getString(R.string.taskbar_scale_label_format, currentTaskbarScale));
+        taskbarScaleSlider.setEnabled(isEnabled);
 
         com.google.android.material.slider.Slider gridHeaderScaleSlider = findViewById(R.id.grid_header_scale_slider);
         TextView gridHeaderScaleLabel = findViewById(R.id.grid_header_scale_label);
@@ -263,6 +282,7 @@ public class MainActivity extends AppCompatActivity {
         taskbarIconCountSlider.setEnabled(isEnabled);
 
         setupSliderTouchInterception(iconScaleSlider);
+        setupSliderTouchInterception(taskbarScaleSlider);
         setupSliderTouchInterception(gridHeaderScaleSlider);
         setupSliderTouchInterception(taskbarIconCountSlider);
 
@@ -273,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
 
             mobileRecentsSwitch.setEnabled(isChecked);
             iconScaleSlider.setEnabled(isChecked);
+            taskbarScaleSlider.setEnabled(isChecked);
             gridHeaderScaleSlider.setEnabled(isChecked);
             taskbarIconCountSlider.setEnabled(isChecked);
 
@@ -300,6 +321,29 @@ public class MainActivity extends AppCompatActivity {
                 vibrate(slider, VibrateType.CLOCK_TICK);
                 int val = (int) slider.getValue();
                 int currentVal = prefsProtected.getInt("taskbar_icon_scale", 85);
+                if (val != currentVal) {
+                    setButtonEnabled(true);
+                }
+                updateCurrentUIState();
+            }
+        });
+
+        taskbarScaleSlider.addOnChangeListener((slider, value, fromUser) -> {
+            taskbarScaleLabel.setText(getString(R.string.taskbar_scale_label_format, (int) value));
+            if (fromUser) vibrate(slider, VibrateType.CLOCK_TICK);
+        });
+
+        taskbarScaleSlider.addOnSliderTouchListener(new com.google.android.material.slider.Slider.OnSliderTouchListener() {
+            @Override
+            public void onStartTrackingTouch(@androidx.annotation.NonNull com.google.android.material.slider.Slider slider) {
+                saveStateForUndo();
+            }
+
+            @Override
+            public void onStopTrackingTouch(@androidx.annotation.NonNull com.google.android.material.slider.Slider slider) {
+                vibrate(slider, VibrateType.CLOCK_TICK);
+                int val = (int) slider.getValue();
+                int currentVal = prefsProtected.getInt("taskbar_scale", 100);
                 if (val != currentVal) {
                     setButtonEnabled(true);
                 }
@@ -409,13 +453,15 @@ public class MainActivity extends AppCompatActivity {
         MaterialSwitch taskbarSwitch = findViewById(R.id.taskbar_switch);
         MaterialSwitch mobileRecentsSwitch = findViewById(R.id.mobile_recents_switch);
         com.google.android.material.slider.Slider iconScaleSlider = findViewById(R.id.icon_scale_slider);
+        com.google.android.material.slider.Slider taskbarScaleSlider = findViewById(R.id.taskbar_scale_slider);
         com.google.android.material.slider.Slider gridHeaderScaleSlider = findViewById(R.id.grid_header_scale_slider);
         com.google.android.material.slider.Slider taskbarIconCountSlider = findViewById(R.id.taskbar_icon_count_slider);
 
         return new SettingsState(
             taskbarSwitch != null && taskbarSwitch.isChecked() ? "1" : "0",
             mobileRecentsSwitch != null && mobileRecentsSwitch.isChecked(),
-            iconScaleSlider != null ? (int) iconScaleSlider.getValue() : 85,
+            iconScaleSlider != null ? (int) iconScaleSlider.getValue() : 100,
+            taskbarScaleSlider != null ? (int) taskbarScaleSlider.getValue() : 100,
             gridHeaderScaleSlider != null ? (int) gridHeaderScaleSlider.getValue() : 70,
             taskbarIconCountSlider != null ? (int) taskbarIconCountSlider.getValue() : 4
         );
@@ -441,6 +487,7 @@ public class MainActivity extends AppCompatActivity {
         MaterialSwitch taskbarSwitch = findViewById(R.id.taskbar_switch);
         MaterialSwitch mobileRecentsSwitch = findViewById(R.id.mobile_recents_switch);
         com.google.android.material.slider.Slider iconScaleSlider = findViewById(R.id.icon_scale_slider);
+        com.google.android.material.slider.Slider taskbarScaleSlider = findViewById(R.id.taskbar_scale_slider);
         com.google.android.material.slider.Slider gridHeaderScaleSlider = findViewById(R.id.grid_header_scale_slider);
         com.google.android.material.slider.Slider taskbarIconCountSlider = findViewById(R.id.taskbar_icon_count_slider);
 
@@ -454,6 +501,11 @@ public class MainActivity extends AppCompatActivity {
         if (iconScaleSlider != null) {
             iconScaleSlider.setValue(state.taskbarIconScale);
             iconScaleSlider.setEnabled(isEnabled);
+        }
+
+        if (taskbarScaleSlider != null) {
+            taskbarScaleSlider.setValue(state.taskbarScale);
+            taskbarScaleSlider.setEnabled(isEnabled);
         }
 
         if (gridHeaderScaleSlider != null) {

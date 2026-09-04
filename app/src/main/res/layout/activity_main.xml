@@ -253,6 +253,74 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
+                <!-- Taskbar Scale Item -->
+                <com.google.android.material.card.MaterialCardView
+                    style="?attr/materialCardViewFilledStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
+                    app:cardBackgroundColor="?attr/colorSurfaceBright"
+                    app:cardElevation="0dp"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.MyApp.ListItem.Middle">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="12dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:baselineAligned="false"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginEnd="16dp"
+                                android:importantForAccessibility="no"
+                                android:src="@drawable/zoom_out_map"
+                                app:tint="?attr/colorPrimary" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/taskbar_scale_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="?attr/colorOnSurface"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    tools:text="Taskbar Scale: 100%" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/taskbar_scale_desc"
+                                    android:textColor="?attr/colorOnSurfaceVariant"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <com.google.android.material.slider.Slider
+                            android:id="@+id/taskbar_scale_slider"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:stepSize="5.0"
+                            android:value="100.0"
+                            android:valueFrom="50.0"
+                            android:valueTo="150.0" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
                 <!-- Icon Scale Item -->
                 <com.google.android.material.card.MaterialCardView
                     style="?attr/materialCardViewFilledStyle"
@@ -314,9 +382,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:stepSize="5.0"
-                            android:value="85.0"
+                            android:value="100.0"
                             android:valueFrom="50.0"
-                            android:valueTo="150.0" />
+                            android:valueTo="100.0" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 

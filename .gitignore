@@ -40,13 +40,5 @@ local.properties
 /ReleaseKey.properties
 /.kotlin
 /.idea/
-NexusLauncher/
-jadx/
-NexusLauncher.apk
-NexusLauncher.zip
-Pixel Launcher.apk
-jadx.zip
-isTablet_search.txt
-dp.txt
-jadx_out_pixel/
+pixelLauncher/
 RELEASING.md

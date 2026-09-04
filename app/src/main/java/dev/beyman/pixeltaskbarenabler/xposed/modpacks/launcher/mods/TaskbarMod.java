@@ -22,6 +22,15 @@ public class TaskbarMod extends BaseLauncherMod {
     /**
      * Aplica los hooks necesarios para forzar la inicialización y despliegue del Taskbar.
      */
+    private boolean isTransientTaskbar(Object context) {
+        if (context == null) return false;
+        try {
+            return de.robv.android.xposed.XposedHelpers.getBooleanField(context, "mIsTransient");
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+
     @Override
     public void applyHooks() throws Throwable {
         ReflectedClass FlagsClass = ReflectedClass.ofIfPossible("com.android.launcher3.Flags");
@@ -33,7 +42,9 @@ public class TaskbarMod extends BaseLauncherMod {
         ReflectedClass StateControllerClass = ReflectedClass.ofIfPossible("com.android.launcher3.taskbar.TaskbarLauncherStateController");
         ReflectedClass QuickSwitchStateClass = ReflectedClass.ofIfPossible("com.android.launcher3.uioverrides.states.QuickSwitchState");
         ReflectedClass TaskbarUiControllerClass = ReflectedClass.ofIfPossible("com.android.launcher3.taskbar.FallbackTaskbarUIController");
-        ReflectedClass TaskbarProfileClass = ReflectedClass.ofIfPossible("com.android.launcher3.deviceprofile.TaskbarProfile");
+        ReflectedClass TaskbarDragLayerClass = ReflectedClass.ofIfPossible("com.android.launcher3.taskbar.TaskbarDragLayer");
+        ReflectedClass BaseDragLayerClass = ReflectedClass.ofIfPossible("com.android.launcher3.views.BaseDragLayer");
+        ReflectedClass TaskbarStashControllerClass = ReflectedClass.ofIfPossible("com.android.launcher3.taskbar.TaskbarStashController");
 
         // Activa la *flag* nativa de Android 15 para forzar la barra de tareas en teléfonos.
         if (FlagsClass != null) {
@@ -64,6 +75,84 @@ public class TaskbarMod extends BaseLauncherMod {
                                 de.robv.android.xposed.XposedHelpers.setBooleanField(param.thisObject, "isTaskbarPresent", true);
                             } catch (Throwable ignored) {
                             }
+                        }
+                    });
+        }
+        // Hook para escalar visualmente toda la capa contenedora del Taskbar a través del Canvas
+        // Esto evita el doble escalado que ocurría al usar View.setScaleX/Y (que recortaba los bordes)
+        if (TaskbarDragLayerClass != null) {
+            TaskbarDragLayerClass
+                    .before("dispatchDraw")
+                    .run(param -> {
+                        if (mSettings.taskbarMode == TaskbarSettings.TASKBAR_DEFAULT) return;
+                        
+                        android.view.View view = (android.view.View) param.thisObject;
+                        if (!isTransientTaskbar(view.getContext())) return;
+                        
+                        float scale = mSettings.taskbarScale;
+                        if (scale != 1.0f) {
+                            android.graphics.Canvas canvas = (android.graphics.Canvas) param.args[0];
+                            canvas.save();
+                            canvas.scale(scale, scale, view.getWidth() / 2f, view.getHeight());
+                        }
+                    });
+
+            TaskbarDragLayerClass
+                    .after("dispatchDraw")
+                    .run(param -> {
+                        if (mSettings.taskbarMode == TaskbarSettings.TASKBAR_DEFAULT) return;
+                        
+                        android.view.View view = (android.view.View) param.thisObject;
+                        if (!isTransientTaskbar(view.getContext())) return;
+                        
+                        float scale = mSettings.taskbarScale;
+                        if (scale != 1.0f) {
+                            android.graphics.Canvas canvas = (android.graphics.Canvas) param.args[0];
+                            canvas.restore();
+                        }
+                    });
+        }
+
+        // Como escalamos la vista, los toques físicos ya no coinciden con la ubicación visual.
+        // Aplicamos la matriz inversa a los eventos táctiles para que coincidan.
+        if (BaseDragLayerClass != null) {
+            BaseDragLayerClass
+                    .before("dispatchTouchEvent")
+                    .run(param -> {
+                        if (mSettings.taskbarMode == TaskbarSettings.TASKBAR_DEFAULT) return;
+                        
+                        android.view.View view = (android.view.View) param.thisObject;
+                        if (!isTransientTaskbar(view.getContext())) return;
+                        
+                        float scale = mSettings.taskbarScale;
+                        if (scale != 1.0f) {
+                            // Solo interceptar para la barra de tareas
+                            if (view.getClass().getName().contains("TaskbarDragLayer")) {
+                                android.view.MotionEvent event = (android.view.MotionEvent) param.args[0];
+                                android.graphics.Matrix m = new android.graphics.Matrix();
+                                // La matriz de toque debe ser el inverso de la matriz de escalado visual
+                                m.setScale(1f / scale, 1f / scale, view.getWidth() / 2f, view.getHeight());
+                                event.transform(m);
+                            }
+                        }
+                    });
+        }
+
+        // Al achicar visualmente el Taskbar, debemos avisarle al sistema Android 
+        // para que reduzca el inset y las aplicaciones puedan bajar a usar ese espacio extra.
+        if (TaskbarStashControllerClass != null) {
+            TaskbarStashControllerClass
+                    .after("getContentHeightToReportToApps")
+                    .run(param -> {
+                        if (mSettings.taskbarMode == TaskbarSettings.TASKBAR_DEFAULT) return;
+                        
+                        Object activity = de.robv.android.xposed.XposedHelpers.getObjectField(param.thisObject, "mActivity");
+                        if (!isTransientTaskbar(activity)) return;
+                        
+                        float scale = mSettings.taskbarScale;
+                        if (scale != 1.0f) {
+                            int result = (int) param.getResult();
+                            param.setResult(Math.round(result * scale));
                         }
                     });
         }
