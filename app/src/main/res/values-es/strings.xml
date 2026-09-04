@@ -17,10 +17,12 @@
     <string name="force_mobile_recents_desc">Usa el diseño de recientes tipo tablet</string>
     <string name="icon_count_desc">Número máximo de aplicaciones en el dock</string>
     <string name="icon_scale_desc">Ajusta el tamaño de los iconos del dock</string>
+    <string name="taskbar_scale_desc">Ajusta el tamaño general del taskbar</string>
     <string name="grid_header_scale_desc">Modifica el tamaño en la vista de recientes</string>
 
     <!-- Formatted Labels -->
     <string name="icon_scale_label_format">Escala de Iconos: %1$d%%</string>
+    <string name="taskbar_scale_label_format">Escala del Taskbar: %1$d%%</string>
     <string name="grid_header_scale_label_format">Escala de Encabezados (Grid): %1$d%%</string>
     <string name="taskbar_icon_count_label_format">Cantidad de Iconos: %1$d</string>
 
@@ -88,6 +90,7 @@
     <string name="taskbar_enabled">Taskbar habilitada</string>
     <string name="taskbar_disabled">Taskbar deshabilitada</string>
     <string name="icon_scale_saved">Escala de iconos guardada: %1$d%%</string>
+    <string name="taskbar_scale_saved">Escala del taskbar guardada: %1$d%%</string>
     <string name="header_scale_saved">Escala de encabezados guardada: %1$d%%</string>
     <string name="mobile_recents_enabled">Modo Móvil en Recientes habilitado</string>
     <string name="mobile_recents_disabled">Modo Móvil en Recientes deshabilitado</string>
