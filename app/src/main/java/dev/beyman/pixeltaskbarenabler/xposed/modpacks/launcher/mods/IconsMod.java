@@ -54,13 +54,14 @@ public class IconsMod extends BaseLauncherMod {
                 if (mSettings.taskbarMode == TaskbarSettings.TASKBAR_ON) {
                     Object[] originalPinned = (Object[]) param.args[0];
                     if (originalPinned != null) {
-                        // Max 3 pinned apps
+                        // Limit pinned apps based on taskbarIconCount setting
                         Object[] newPinned = originalPinned.clone();
                         int pinnedCount = 0;
                         for (int i = 0; i < newPinned.length; i++) {
                             if (newPinned[i] != null) {
-                                if (pinnedCount >= 3) {
+                                if (pinnedCount >= mSettings.taskbarIconCount) {
                                     newPinned[i] = null; // Remove excess pinned apps
+
                                 } else {
                                     pinnedCount++;
                                 }
@@ -234,24 +235,6 @@ public class IconsMod extends BaseLauncherMod {
                     } catch (Throwable ignored) {
                     }
 
-                    try {
-                        Object inv = de.robv.android.xposed.XposedHelpers.getObjectField(param.thisObject, "inv");
-                        if (inv != null)
-                            de.robv.android.xposed.XposedHelpers.setIntField(inv, "numDatabaseHotseatIcons", mSettings.taskbarIconCount);
-                    } catch (Throwable ignored) {
-                    }
-                    try {
-                        Object hotseatProfile = de.robv.android.xposed.XposedHelpers.getObjectField(param.thisObject, "hotseatProfile");
-                        if (hotseatProfile != null)
-                            de.robv.android.xposed.XposedHelpers.setIntField(hotseatProfile, "numShownIcons", mSettings.taskbarIconCount);
-                    } catch (Throwable ignored) {
-                    }
-                    try {
-                        Object mHotseatProfile = de.robv.android.xposed.XposedHelpers.getObjectField(param.thisObject, "mHotseatProfile");
-                        if (mHotseatProfile != null)
-                            de.robv.android.xposed.XposedHelpers.setIntField(mHotseatProfile, "numShownIcons", mSettings.taskbarIconCount);
-                    } catch (Throwable ignored) {
-                    }
                 }
             });
         }
@@ -417,10 +400,7 @@ public class IconsMod extends BaseLauncherMod {
                     .after("initGrid")
                     .run(param -> {
                         if (mSettings.taskbarMode == TaskbarSettings.TASKBAR_ON) {
-                            try {
-                                de.robv.android.xposed.XposedHelpers.setIntField(param.thisObject, "numDatabaseHotseatIcons", mSettings.taskbarIconCount);
-                            } catch (Throwable ignored) {
-                            }
+                            // Removing numDatabaseHotseatIcons modification to keep default home screen dock
                         }
                     });
         }
@@ -428,12 +408,7 @@ public class IconsMod extends BaseLauncherMod {
         if (HotseatProfileClass != null) {
             HotseatProfileClass.afterConstruction().run(param -> {
                 if (mSettings.taskbarMode == TaskbarSettings.TASKBAR_ON) {
-                    try {
-                        de.robv.android.xposed.XposedHelpers.setIntField(param.thisObject, "numShownIcons", mSettings.taskbarIconCount);
-                        de.robv.android.xposed.XposedBridge.log("PTE: Successfully set HotseatProfile.numShownIcons to " + mSettings.taskbarIconCount);
-                    } catch (Throwable t) {
-                        de.robv.android.xposed.XposedBridge.log("PTE: Error setting numShownIcons: " + t.getMessage());
-                    }
+                    // Removing numShownIcons modification to keep default home screen dock
                 }
             });
         }
