@@ -3,7 +3,7 @@ name: Build and Release
 on:
   push:
     tags:
-      - 'v*' # Trigger on tags like v1.0.0, v1.1, etc.
+      - '*-*' # Trigger on Xposed tags like 1-1.0.0, 2-1.0.1, etc.
   workflow_dispatch: # Allows manual trigger from Actions tab
 
 jobs:
