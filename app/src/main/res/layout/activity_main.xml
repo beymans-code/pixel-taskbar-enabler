@@ -259,10 +259,9 @@
                     style="?attr/materialCardViewFilledStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
                     app:cardBackgroundColor="?attr/colorSurfaceBright"
                     app:cardElevation="0dp"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearance.MyApp.ListItem.Middle">
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.MyApp.ListItem.Bottom">
 
                     <LinearLayout
                         android:layout_width="match_parent"
