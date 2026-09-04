@@ -5,17 +5,15 @@ import android.content.Context;
 import dev.beyman.pixeltaskbarenabler.xposed.modpacks.launcher.TaskbarActivator;
 import dev.beyman.pixeltaskbarenabler.xposed.modpacks.launcher.TaskbarSettings;
 import dev.beyman.pixeltaskbarenabler.xposed.utils.reflection.ReflectedClass;
-import dev.beyman.pixeltaskbarenabler.xposed.utils.reflection.ReflectedClass.ReflectionConsumer;
 
 import java.util.HashSet;
 
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.getIntField;
 
 /**
  * Submódulo responsable de las modificaciones visuales en los íconos del Launcher.
- * Ajusta la escala de los íconos (TaskbarIconSize), gestiona la cantidad de íconos que 
- * se muestran en el dock (TaskbarIconCount) y modifica los espacios y dimensiones de los botones.
+ * Gestiona la cantidad de íconos que se muestran en el dock (TaskbarIconCount)
+ * y modifica los espacios y dimensiones de los botones.
  */
 public class IconsMod extends BaseLauncherMod {
 
@@ -24,7 +22,7 @@ public class IconsMod extends BaseLauncherMod {
     }
 
     /**
-     * Aplica los hooks necesarios para sobrescribir la escala y límites visuales de los iconos.
+     * Aplica los hooks necesarios para gestionar los límites visuales de los iconos.
      */
     @Override
     public void applyHooks() throws Throwable {
@@ -33,10 +31,6 @@ public class IconsMod extends BaseLauncherMod {
         ReflectedClass KeyboardQuickSwitchControllerClass = ReflectedClass.ofIfPossible("com.android.launcher3.taskbar.KeyboardQuickSwitchController");
         ReflectedClass TaskbarActivityContextClass = ReflectedClass.ofIfPossible("com.android.launcher3.taskbar.TaskbarActivityContext");
         ReflectedClass DeviceProfileClass = ReflectedClass.ofIfPossible("com.android.launcher3.DeviceProfile");
-        ReflectedClass TaskbarProfileClass = ReflectedClass.ofIfPossible("com.android.launcher3.deviceprofile.TaskbarProfile");
-        ReflectedClass TaskbarIconSizeClass = ReflectedClass.ofIfPossible("com.android.launcher3.taskbar.customization.TaskbarIconSize");
-        ReflectedClass BubbleTextViewClass = ReflectedClass.ofIfPossible("com.android.launcher3.BubbleTextView");
-        ReflectedClass TaskbarSpecsEvaluatorClass = ReflectedClass.ofIfPossible("com.android.launcher3.taskbar.customization.TaskbarSpecsEvaluator");
         ReflectedClass InvariantDeviceProfileClass = ReflectedClass.ofIfPossible("com.android.launcher3.InvariantDeviceProfile");
         ReflectedClass HotseatProfileClass = ReflectedClass.ofIfPossible("com.android.launcher3.deviceprofile.HotseatProfile");
 
@@ -239,41 +233,6 @@ public class IconsMod extends BaseLauncherMod {
             });
         }
 
-        // Re-calcula y aplica la escala seleccionada por el usuario (TaskbarIconScale) a 
-        // los diversos tamaños e íconos en el dock.
-        if (TaskbarProfileClass != null) {
-            TaskbarProfileClass
-                    .afterConstruction()
-                    .run(param -> {
-                        if (mSettings.taskbarMode == TaskbarSettings.TASKBAR_ON) {
-                            try {
-                                int currentSize = de.robv.android.xposed.XposedHelpers.getIntField(param.thisObject, "iconSizePx");
-                                de.robv.android.xposed.XposedHelpers.setIntField(param.thisObject, "iconSizePx", Math.round(currentSize * mSettings.taskbarIconScale));
-                            } catch (Throwable ignored) {
-                            }
-                            try {
-                                int currentDrawableSize = de.robv.android.xposed.XposedHelpers.getIntField(param.thisObject, "iconDrawableSizePx");
-                                de.robv.android.xposed.XposedHelpers.setIntField(param.thisObject, "iconDrawableSizePx", Math.round(currentDrawableSize * mSettings.taskbarIconScale));
-                            } catch (Throwable ignored) {
-                            }
-                        }
-                    });
-        }
-
-        if (TaskbarIconSizeClass != null) {
-            TaskbarIconSizeClass
-                    .afterConstruction()
-                    .run(param -> {
-                        if (mSettings.taskbarMode == TaskbarSettings.TASKBAR_ON) {
-                            try {
-                                int s = getIntField(param.thisObject, "size");
-                                de.robv.android.xposed.XposedHelpers.setIntField(param.thisObject, "size", Math.round(s * mSettings.taskbarIconScale));
-                            } catch (Throwable ignored) {
-                            }
-                        }
-                    });
-        }
-
         if (TaskbarActivityContextClass != null) {
             TaskbarActivityContextClass
                     .afterConstruction()
@@ -282,19 +241,13 @@ public class IconsMod extends BaseLauncherMod {
                             try {
                                 Object taskbarDeviceProfile = de.robv.android.xposed.XposedHelpers.getObjectField(param.thisObject, "mDeviceProfile");
                                 if (taskbarDeviceProfile != null) {
-                                    int currentSize = de.robv.android.xposed.XposedHelpers.getIntField(taskbarDeviceProfile, "iconSizePx");
-                                    de.robv.android.xposed.XposedHelpers.setIntField(taskbarDeviceProfile, "iconSizePx", Math.round(currentSize * mSettings.taskbarIconScale));
-
-                                    int currentDrawableSize = de.robv.android.xposed.XposedHelpers.getIntField(taskbarDeviceProfile, "iconDrawableSizePx");
-                                    de.robv.android.xposed.XposedHelpers.setIntField(taskbarDeviceProfile, "iconDrawableSizePx", Math.round(currentDrawableSize * mSettings.taskbarIconScale));
-                                    
                                     try {
                                         Object hotseatProfile = de.robv.android.xposed.XposedHelpers.getObjectField(taskbarDeviceProfile, "hotseatProfile");
                                         if (hotseatProfile != null) {
                                             de.robv.android.xposed.XposedHelpers.setIntField(hotseatProfile, "numShownIcons", mSettings.taskbarIconCount);
                                         }
                                     } catch (Throwable ignored) {}
-                                    
+
                                     try {
                                         Object mHotseatProfile = de.robv.android.xposed.XposedHelpers.getObjectField(taskbarDeviceProfile, "mHotseatProfile");
                                         if (mHotseatProfile != null) {
@@ -304,93 +257,6 @@ public class IconsMod extends BaseLauncherMod {
                                 }
                             } catch (Throwable ignored) {
                             }
-
-                            try {
-                                Object mControllers = de.robv.android.xposed.XposedHelpers.getObjectField(param.thisObject, "mControllers");
-                                Object taskbarViewController = de.robv.android.xposed.XposedHelpers.getObjectField(mControllers, "taskbarViewController");
-
-                                int tSize = de.robv.android.xposed.XposedHelpers.getIntField(taskbarViewController, "mTransientIconSize");
-                                de.robv.android.xposed.XposedHelpers.setIntField(taskbarViewController, "mTransientIconSize", Math.round(tSize * mSettings.taskbarIconScale));
-
-                                int pSize = de.robv.android.xposed.XposedHelpers.getIntField(taskbarViewController, "mPersistentIconSize");
-                                de.robv.android.xposed.XposedHelpers.setIntField(taskbarViewController, "mPersistentIconSize", Math.round(pSize * mSettings.taskbarIconScale));
-                            } catch (Throwable ignored) {
-                            }
-                        }
-                    });
-        }
-
-        // Fuerza a BubbleTextView a utilizar el tamaño reescalado para sus iconos y 
-        // ajusta sus márgenes superiores/padding para centrar la visualización.
-        if (BubbleTextViewClass != null) {
-            BubbleTextViewClass
-                    .afterConstruction()
-                    .run(param -> {
-                        if (mSettings.taskbarMode == TaskbarSettings.TASKBAR_ON) {
-                            try {
-                                int display = de.robv.android.xposed.XposedHelpers.getIntField(param.thisObject, "mDisplay");
-                                if (display == 5) { // Taskbar
-                                    int currentIconSize = de.robv.android.xposed.XposedHelpers.getIntField(param.thisObject, "mIconSize");
-                                    de.robv.android.xposed.XposedHelpers.setIntField(param.thisObject, "mIconSize", Math.round(currentIconSize * mSettings.taskbarIconScale));
-                                }
-                            } catch (Throwable ignored) {
-                            }
-                        }
-                    });
-
-            BubbleTextViewClass
-                    .after("onSizeChanged")
-                    .run(param -> {
-                        if (mSettings.taskbarMode == TaskbarSettings.TASKBAR_ON) {
-                            try {
-                                int display = de.robv.android.xposed.XposedHelpers.getIntField(param.thisObject, "mDisplay");
-                                if (display == 5) { // Taskbar
-                                    android.view.View view = (android.view.View) param.thisObject;
-                                    int currentIconSize = de.robv.android.xposed.XposedHelpers.getIntField(param.thisObject, "mIconSize");
-                                    int h = (int) param.args[1];
-                                    int pt = (h - currentIconSize) / 2;
-                                    if (pt > 0 && view.getPaddingTop() != pt) {
-                                        view.setPadding(view.getPaddingLeft(), pt, view.getPaddingRight(), view.getPaddingBottom());
-                                    }
-                                }
-                            } catch (Throwable ignored) {
-                            }
-                        }
-                    });
-        }
-
-        // Escala el tamaño del botón 'App Drawer' (Cajón de Aplicaciones).
-        if (TaskbarSpecsEvaluatorClass != null) {
-            TaskbarSpecsEvaluatorClass
-                    .after("getTaskbarAllAppsButtonIconViewWidth")
-                    .run(param -> {
-                        if (mSettings.taskbarMode == TaskbarSettings.TASKBAR_ON) {
-                            float original = (float) param.getResult();
-                            param.setResult(original * mSettings.taskbarIconScale);
-                        }
-                    });
-            TaskbarSpecsEvaluatorClass
-                    .after("getTaskbarAllAppsButtonIconViewHeight")
-                    .run(param -> {
-                        if (mSettings.taskbarMode == TaskbarSettings.TASKBAR_ON) {
-                            float original = (float) param.getResult();
-                            param.setResult(original * mSettings.taskbarIconScale);
-                        }
-                    });
-            TaskbarSpecsEvaluatorClass
-                    .after("getTaskbarAllAppsButtonWidth")
-                    .run(param -> {
-                        if (mSettings.taskbarMode == TaskbarSettings.TASKBAR_ON) {
-                            float original = (float) param.getResult();
-                            param.setResult(original * mSettings.taskbarIconScale);
-                        }
-                    });
-            TaskbarSpecsEvaluatorClass
-                    .after("getTaskbarAllAppsButtonHeight")
-                    .run(param -> {
-                        if (mSettings.taskbarMode == TaskbarSettings.TASKBAR_ON) {
-                            float original = (float) param.getResult();
-                            param.setResult(original * mSettings.taskbarIconScale);
                         }
                     });
         }

@@ -22,7 +22,6 @@ public class TaskbarSettings {
     public int taskbarMode = TASKBAR_DEFAULT;
     public boolean enableRecentsGrid = false;
     public boolean mobileRecents = false;
-    public float taskbarIconScale = 1.0f;
     public float taskbarScale = 1.0f;
     public float gridHeaderScale = 0.70f;
     public int taskbarIconCount = 4;
@@ -41,7 +40,6 @@ public class TaskbarSettings {
     public void update(String... key) {
         taskbarMode = Integer.parseInt(Xprefs.getString("taskBarMode", String.valueOf(TASKBAR_DEFAULT)));
         enableRecentsGrid = Xprefs.getBoolean("enable_recents_grid", false);
-        taskbarIconScale = Xprefs.getInt("taskbar_icon_scale", 100) / 100f;
         taskbarScale = Xprefs.getInt("taskbar_scale", 100) / 100f;
         gridHeaderScale = Xprefs.getInt("grid_header_scale", 70) / 100f;
         taskbarIconCount = Math.min(Xprefs.getInt("taskbar_icon_count", 4), 5);
