@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/btnShowLogs"
+        android:icon="@drawable/code"
+        android:title="@string/btn_logs"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/btnShowInstructions"
+        android:icon="@drawable/info"
+        android:title="@string/btn_instructions"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/btnShowAbout"
+        android:icon="@drawable/about"
+        android:title="@string/btn_about"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/btnChangeIcon"
+        android:icon="@drawable/settings"
+        android:title="@string/btn_settings"
+        app:showAsAction="ifRoom" />
+</menu>

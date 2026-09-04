@@ -6,6 +6,7 @@
     tools:ignore="HardcodedText,SmallSp,UseCompoundDrawables,ImageContrastCheck,TouchTargetSizeCheck,VisualLintButtonSize,DuplicateSpeakableTextCheck"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="false"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -541,52 +542,58 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Bottom Container (Pill + FAB) -->
+    <!-- Bottom Navbar Shadow -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="-60dp"
+        android:background="@drawable/bottom_shadow_gradient"
+        android:clickable="true"
+        android:focusable="true" />
+
+    <!-- Bottom Container (Pill Nav + FABs) -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="0dp"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="16dp"
-        android:translationY="40dp">
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="12dp">
 
         <!-- Fixed Bottom Tab Bar Pill -->
         <com.google.android.material.card.MaterialCardView
             style="?attr/materialCardViewElevatedStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="64dp"
             android:layout_gravity="bottom|start"
             android:layout_marginEnd="72dp"
-            android:translationY="2.5dp"
             app:cardBackgroundColor="?attr/colorSurfaceContainerHigh"
             app:cardCornerRadius="32dp"
-            app:cardElevation="5dp">
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:baselineAligned="false"
                 android:orientation="horizontal"
                 android:paddingHorizontal="8dp"
-                android:paddingVertical="4dp"
-                android:baselineAligned="true"
                 android:weightSum="4">
 
                 <!-- Button Logs -->
                 <LinearLayout
                     android:id="@+id/btnShowLogs"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="4dp">
+                    android:paddingHorizontal="8dp">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -603,22 +610,21 @@
                         android:maxLines="1"
                         android:text="@string/btn_logs"
                         android:textColor="?attr/colorOnSurface"
-                        android:textSize="8sp" />
+                        android:textSize="10sp" />
                 </LinearLayout>
 
-                <!-- Button Instrucciones -->
+                <!-- Button Instructions -->
                 <LinearLayout
                     android:id="@+id/btnShowInstructions"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="4dp">
+                    android:paddingHorizontal="8dp">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -635,22 +641,21 @@
                         android:maxLines="1"
                         android:text="@string/btn_instructions"
                         android:textColor="?attr/colorOnSurface"
-                        android:textSize="8sp" />
+                        android:textSize="10sp" />
                 </LinearLayout>
 
-                <!-- Button Acerca de -->
+                <!-- Button About -->
                 <LinearLayout
                     android:id="@+id/btnShowAbout"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="4dp">
+                    android:paddingHorizontal="8dp">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -667,22 +672,21 @@
                         android:maxLines="1"
                         android:text="@string/btn_about"
                         android:textColor="?attr/colorOnSurface"
-                        android:textSize="8sp" />
+                        android:textSize="10sp" />
                 </LinearLayout>
 
-                <!-- Button Ajustes -->
+                <!-- Button Settings -->
                 <LinearLayout
                     android:id="@+id/btnChangeIcon"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="4dp">
+                    android:paddingHorizontal="8dp">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -699,10 +703,11 @@
                         android:maxLines="1"
                         android:text="@string/btn_settings"
                         android:textColor="?attr/colorOnSurface"
-                        android:textSize="8sp" />
+                        android:textSize="10sp" />
                 </LinearLayout>
 
             </LinearLayout>
+
         </com.google.android.material.card.MaterialCardView>
 
         <!-- FABs Container -->
@@ -720,10 +725,13 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/redo"
                 android:visibility="gone"
+                android:stateListAnimator="@null"
                 app:fabCustomSize="40dp"
                 app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
                 app:srcCompat="@drawable/redo"
                 app:elevation="4dp"
+                app:pressedTranslationZ="0dp"
+                app:hoveredFocusedTranslationZ="0dp"
                 app:backgroundTint="?attr/colorOutlineVariant"
                 app:tint="?attr/colorOutline" />
 
@@ -734,10 +742,13 @@
                 android:layout_marginBottom="5dp"
                 android:contentDescription="@string/undo"
                 android:visibility="gone"
+                android:stateListAnimator="@null"
                 app:fabCustomSize="40dp"
                 app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
                 app:srcCompat="@drawable/undo"
                 app:elevation="4dp"
+                app:pressedTranslationZ="0dp"
+                app:hoveredFocusedTranslationZ="0dp"
                 app:backgroundTint="?attr/colorOutlineVariant"
                 app:tint="?attr/colorOutline" />
 
@@ -752,7 +763,9 @@
                 android:enabled="false"
                 android:visibility="gone"
                 android:stateListAnimator="@null"
-                app:elevation="6dp"
+                app:elevation="4dp"
+                app:pressedTranslationZ="0dp"
+                app:hoveredFocusedTranslationZ="0dp"
                 app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
                 app:srcCompat="@drawable/save"
                 app:backgroundTint="?attr/colorOutlineVariant"
@@ -761,17 +774,20 @@
             <!-- Main Toggle FAB -->
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fabMainToggle"
-                android:importantForAccessibility="no"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="?attr/colorSurfaceContainerHigh"
-                app:backgroundTint="?attr/colorSurfaceContainerHigh"
-                app:elevation="5dp"
-                app:tint="?attr/colorOnSurface"
-                app:shapeAppearanceOverlay="@style/ShapeAppearance.MyApp.FAB50dp"
-                android:src="@android:drawable/ic_input_add" />
+                android:background="?attr/colorPrimary"
+                android:importantForAccessibility="no"
+                android:src="@android:drawable/ic_input_add"
+                android:stateListAnimator="@null"
+                app:backgroundTint="?attr/colorPrimary"
+                app:elevation="4dp"
+                app:pressedTranslationZ="0dp"
+                app:hoveredFocusedTranslationZ="0dp"
+                app:fabCustomSize="64dp"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+                app:tint="?attr/colorOnPrimary" />
         </LinearLayout>
-
     </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
