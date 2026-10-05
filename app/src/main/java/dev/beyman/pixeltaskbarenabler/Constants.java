@@ -24,6 +24,7 @@ public final class Constants {
 
 
 	public static final String LAUNCHER_PACKAGE = "com.google.android.apps.nexuslauncher";
+	public static final String SYSTEMUI_PACKAGE = "com.android.systemui";
 
 	public static final String LAUNCH_REASON_EXTRA = "LAUNCH_REASON";
 	public static final String LAUNCH_REASON_XPOSED_SERVICE_FAIL = "XPOSED_SERVICE_FAIL";

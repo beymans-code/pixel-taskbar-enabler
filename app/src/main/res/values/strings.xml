@@ -104,6 +104,8 @@
 
     <string name="restarting_launcher">Restarting Launcher…</string>
     <string name="launcher_restarted_success">Launcher restarted successfully.</string>
+    <string name="restarting_systemui">Restarting SystemUI&#8230;</string>
+    <string name="systemui_restarted_success">SystemUI restarted successfully.</string>
     <string name="error_root_denied">Error: Root permissions denied.</string>
 
 </resources>

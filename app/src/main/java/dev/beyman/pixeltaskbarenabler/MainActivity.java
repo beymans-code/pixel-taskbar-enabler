@@ -815,6 +815,18 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
+    private void restartSystemUI() {
+        logMessage(R.string.restarting_systemui);
+        new Thread(() -> {
+            if (com.topjohnwu.superuser.Shell.getShell().isRoot()) {
+                AppUtils.restart("com.android.systemui");
+                runOnUiThread(() -> logMessage(R.string.systemui_restarted_success));
+            } else {
+                runOnUiThread(() -> logMessage(R.string.error_root_denied));
+            }
+        }).start();
+    }
+
     private void updateLogText(String logs) {
         if (logTextView == null) return;
 

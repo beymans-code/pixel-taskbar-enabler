@@ -104,6 +104,8 @@
 
     <string name="restarting_launcher">Reiniciando Launcher…</string>
     <string name="launcher_restarted_success">Launcher reiniciado con éxito.</string>
+    <string name="restarting_systemui">Reiniciando SystemUI&#8230;</string>
+    <string name="systemui_restarted_success">SystemUI reiniciado con éxito.</string>
     <string name="error_root_denied">Error: Permisos Root no concedidos.</string>
 
 </resources>
