@@ -144,12 +144,23 @@ public class MainActivity extends AppCompatActivity {
             int oldHeaderScale = prefsProtected.getInt("grid_header_scale", 70);
             int oldIconCount = prefsProtected.getInt("taskbar_icon_count", 4);
             boolean oldMobileRecents = prefsProtected.getBoolean("mobile_recents", false);
+            String oldDismissPosition = prefsProtected.getString("dismiss_position", "BOTTOM_MIDDLE");
 
             String newTaskBarMode = currentTaskbarSwitch.isChecked() ? "1" : "0";
             int newTaskbarScale = (int) currentTaskbarScaleSlider.getValue();
             int newHeaderScale = (int) currentGridHeaderScaleSlider.getValue();
             int newIconCount = (int) currentTaskbarIconCountSlider.getValue();
             boolean newMobileRecents = currentMobileRecentsSwitch.isChecked();
+
+            android.widget.RadioGroup radioGroupDismiss = findViewById(R.id.radio_group_dismiss_position);
+            String newDismissPosition = "BOTTOM_MIDDLE";
+            if (radioGroupDismiss != null) {
+                int selectedId = radioGroupDismiss.getCheckedRadioButtonId();
+                if (selectedId == R.id.radio_dismiss_top) newDismissPosition = "TOP_MIDDLE";
+                else if (selectedId == R.id.radio_dismiss_left) newDismissPosition = "LEFT_MIDDLE";
+                else if (selectedId == R.id.radio_dismiss_right) newDismissPosition = "RIGHT_MIDDLE";
+                else if (selectedId == R.id.radio_dismiss_center) newDismissPosition = "CENTER";
+            }
 
             SharedPreferences.Editor editorNormal = prefsNormal.edit();
             SharedPreferences.Editor editorProtected = prefsProtected.edit();
@@ -189,10 +200,21 @@ public class MainActivity extends AppCompatActivity {
                 changed = true;
             }
 
+            boolean dismissChanged = false;
+            if (!newDismissPosition.equals(oldDismissPosition)) {
+                editorNormal.putString("dismiss_position", newDismissPosition);
+                editorProtected.putString("dismiss_position", newDismissPosition);
+                changed = true;
+                dismissChanged = true;
+            }
+
             if (changed) {
                 editorNormal.apply();
                 editorProtected.apply();
                 restartLauncher();
+                if (dismissChanged) {
+                    restartSystemUI();
+                }
             }
             
             setButtonEnabled(false);
@@ -240,6 +262,20 @@ public class MainActivity extends AppCompatActivity {
 
         boolean isMobileRecentsEnabled = prefsProtected.getBoolean("mobile_recents", false);
         mobileRecentsSwitch.setChecked(isMobileRecentsEnabled);
+
+        android.widget.RadioGroup radioGroupDismiss = findViewById(R.id.radio_group_dismiss_position);
+        if (radioGroupDismiss != null) {
+            String currentDismissPos = prefsProtected.getString("dismiss_position", "BOTTOM_MIDDLE");
+            if ("TOP_MIDDLE".equals(currentDismissPos)) radioGroupDismiss.check(R.id.radio_dismiss_top);
+            else if ("LEFT_MIDDLE".equals(currentDismissPos)) radioGroupDismiss.check(R.id.radio_dismiss_left);
+            else if ("RIGHT_MIDDLE".equals(currentDismissPos)) radioGroupDismiss.check(R.id.radio_dismiss_right);
+            else if ("CENTER".equals(currentDismissPos)) radioGroupDismiss.check(R.id.radio_dismiss_center);
+            else radioGroupDismiss.check(R.id.radio_dismiss_bottom);
+            
+            radioGroupDismiss.setOnCheckedChangeListener((group, checkedId) -> {
+                setButtonEnabled(true);
+            });
+        }
 
         com.google.android.material.slider.Slider taskbarScaleSlider = findViewById(R.id.taskbar_scale_slider);
         TextView taskbarScaleLabel = findViewById(R.id.taskbar_scale_label);

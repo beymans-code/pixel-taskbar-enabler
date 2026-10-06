@@ -6,6 +6,7 @@ import android.content.Context;
 import dev.beyman.pixeltaskbarenabler.xposed.XposedModPack;
 import dev.beyman.pixeltaskbarenabler.xposed.annotations.SystemUiModPack;
 import dev.beyman.pixeltaskbarenabler.xposed.modpacks.systemui.mods.ReverseBubbleLayoutMod;
+import dev.beyman.pixeltaskbarenabler.xposed.modpacks.systemui.mods.DismissPositionMod;
 import io.github.libxposed.api.XposedModuleInterface;
 
 @SystemUiModPack
@@ -25,5 +26,8 @@ public class SystemUiActivator extends XposedModPack {
     public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
         ReverseBubbleLayoutMod reverseBubbleLayoutMod = new ReverseBubbleLayoutMod(mContext);
         reverseBubbleLayoutMod.applyHooks();
+
+        DismissPositionMod dismissPositionMod = new DismissPositionMod(mContext);
+        dismissPositionMod.applyHooks();
     }
 }

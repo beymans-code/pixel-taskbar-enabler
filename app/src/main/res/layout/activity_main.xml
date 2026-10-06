@@ -470,6 +470,56 @@
 
             </LinearLayout>
 
+            <!-- Subheader: Bubbles -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/bebas_neue_regular"
+                android:text="BUBBLES SETTINGS"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="16sp"
+                app:fontFamily="@font/bebas_neue_regular" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="?attr/materialCardViewFilledStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                app:cardBackgroundColor="?attr/colorSurfaceBright"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:text="Dismiss Position (X)" />
+
+                    <RadioGroup
+                        android:id="@+id/radio_group_dismiss_position"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical">
+
+                        <RadioButton android:id="@+id/radio_dismiss_bottom" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bottom Middle (Default)" />
+                        <RadioButton android:id="@+id/radio_dismiss_top" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Top Middle" />
+                        <RadioButton android:id="@+id/radio_dismiss_left" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Left Middle" />
+                        <RadioButton android:id="@+id/radio_dismiss_right" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Right Middle" />
+                        <RadioButton android:id="@+id/radio_dismiss_center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Center" />
+                    </RadioGroup>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
