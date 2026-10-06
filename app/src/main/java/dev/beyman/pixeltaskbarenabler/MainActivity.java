@@ -35,13 +35,17 @@ public class MainActivity extends AppCompatActivity {
         int taskbarScale;
         int gridHeaderScale;
         int taskbarIconCount;
+        boolean reverseBubble;
+        String dismissPosition;
 
-        SettingsState(String taskBarMode, boolean mobileRecents, int taskbarScale, int gridHeaderScale, int taskbarIconCount) {
+        SettingsState(String taskBarMode, boolean mobileRecents, int taskbarScale, int gridHeaderScale, int taskbarIconCount, boolean reverseBubble, String dismissPosition) {
             this.taskBarMode = taskBarMode;
             this.mobileRecents = mobileRecents;
             this.taskbarScale = taskbarScale;
             this.gridHeaderScale = gridHeaderScale;
             this.taskbarIconCount = taskbarIconCount;
+            this.reverseBubble = reverseBubble;
+            this.dismissPosition = dismissPosition;
         }
     }
 
@@ -69,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton btnRedo;
     FloatingActionButton btnApplyChanges;
     FloatingActionButton fabMainToggle;
+    
+    private String pendingDismissPosition = "BOTTOM_MIDDLE";
 
     // =========================================================================
     // MARK: LIFECYCLE METHODS
@@ -145,22 +151,17 @@ public class MainActivity extends AppCompatActivity {
             int oldIconCount = prefsProtected.getInt("taskbar_icon_count", 4);
             boolean oldMobileRecents = prefsProtected.getBoolean("mobile_recents", false);
             String oldDismissPosition = prefsProtected.getString("dismiss_position", "BOTTOM_MIDDLE");
+            boolean oldReverseBubble = prefsProtected.getBoolean("enable_reverse_bubble", false);
 
             String newTaskBarMode = currentTaskbarSwitch.isChecked() ? "1" : "0";
             int newTaskbarScale = (int) currentTaskbarScaleSlider.getValue();
             int newHeaderScale = (int) currentGridHeaderScaleSlider.getValue();
             int newIconCount = (int) currentTaskbarIconCountSlider.getValue();
             boolean newMobileRecents = currentMobileRecentsSwitch.isChecked();
-
-            android.widget.RadioGroup radioGroupDismiss = findViewById(R.id.radio_group_dismiss_position);
-            String newDismissPosition = "BOTTOM_MIDDLE";
-            if (radioGroupDismiss != null) {
-                int selectedId = radioGroupDismiss.getCheckedRadioButtonId();
-                if (selectedId == R.id.radio_dismiss_top) newDismissPosition = "TOP_MIDDLE";
-                else if (selectedId == R.id.radio_dismiss_left) newDismissPosition = "LEFT_MIDDLE";
-                else if (selectedId == R.id.radio_dismiss_right) newDismissPosition = "RIGHT_MIDDLE";
-                else if (selectedId == R.id.radio_dismiss_center) newDismissPosition = "CENTER";
-            }
+            
+            MaterialSwitch reverseBubbleSwitch = findViewById(R.id.reverse_bubble_switch);
+            boolean newReverseBubble = reverseBubbleSwitch != null && reverseBubbleSwitch.isChecked();
+            String newDismissPosition = pendingDismissPosition;
 
             SharedPreferences.Editor editorNormal = prefsNormal.edit();
             SharedPreferences.Editor editorProtected = prefsProtected.edit();
@@ -201,6 +202,14 @@ public class MainActivity extends AppCompatActivity {
             }
 
             boolean dismissChanged = false;
+            
+            if (newReverseBubble != oldReverseBubble) {
+                editorNormal.putBoolean("enable_reverse_bubble", newReverseBubble);
+                editorProtected.putBoolean("enable_reverse_bubble", newReverseBubble);
+                changed = true;
+                dismissChanged = true;
+            }
+
             if (!newDismissPosition.equals(oldDismissPosition)) {
                 editorNormal.putString("dismiss_position", newDismissPosition);
                 editorProtected.putString("dismiss_position", newDismissPosition);
@@ -263,17 +272,36 @@ public class MainActivity extends AppCompatActivity {
         boolean isMobileRecentsEnabled = prefsProtected.getBoolean("mobile_recents", false);
         mobileRecentsSwitch.setChecked(isMobileRecentsEnabled);
 
-        android.widget.RadioGroup radioGroupDismiss = findViewById(R.id.radio_group_dismiss_position);
-        if (radioGroupDismiss != null) {
-            String currentDismissPos = prefsProtected.getString("dismiss_position", "BOTTOM_MIDDLE");
-            if ("TOP_MIDDLE".equals(currentDismissPos)) radioGroupDismiss.check(R.id.radio_dismiss_top);
-            else if ("LEFT_MIDDLE".equals(currentDismissPos)) radioGroupDismiss.check(R.id.radio_dismiss_left);
-            else if ("RIGHT_MIDDLE".equals(currentDismissPos)) radioGroupDismiss.check(R.id.radio_dismiss_right);
-            else if ("CENTER".equals(currentDismissPos)) radioGroupDismiss.check(R.id.radio_dismiss_center);
-            else radioGroupDismiss.check(R.id.radio_dismiss_bottom);
-            
-            radioGroupDismiss.setOnCheckedChangeListener((group, checkedId) -> {
+        MaterialSwitch reverseBubbleSwitch = findViewById(R.id.reverse_bubble_switch);
+        com.google.android.material.card.MaterialCardView cardDismissPosition = findViewById(R.id.card_dismiss_position);
+
+        boolean isReverseBubbleEnabled = prefsProtected.getBoolean("enable_reverse_bubble", false);
+        if (reverseBubbleSwitch != null) {
+            reverseBubbleSwitch.setChecked(isReverseBubbleEnabled);
+            if (cardDismissPosition != null) {
+                cardDismissPosition.setEnabled(isReverseBubbleEnabled);
+                cardDismissPosition.setAlpha(isReverseBubbleEnabled ? 1.0f : 0.5f);
+            }
+            reverseBubbleSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                vibrate(buttonView, VibrateType.CLOCK_TICK);
+                if (isRestoringState) return;
+                saveStateForUndo();
+                if (cardDismissPosition != null) {
+                    cardDismissPosition.setEnabled(isChecked);
+                    cardDismissPosition.setAlpha(isChecked ? 1.0f : 0.5f);
+                }
                 setButtonEnabled(true);
+                updateCurrentUIState();
+            });
+        }
+
+        pendingDismissPosition = prefsProtected.getString("dismiss_position", "BOTTOM_MIDDLE");
+        updateDismissPositionDesc();
+
+        if (cardDismissPosition != null) {
+            cardDismissPosition.setOnClickListener(v -> {
+                vibrate(v, VibrateType.VIRTUAL_KEY);
+                showDismissPositionBottomSheet();
             });
         }
 
@@ -447,13 +475,16 @@ public class MainActivity extends AppCompatActivity {
         com.google.android.material.slider.Slider taskbarScaleSlider = findViewById(R.id.taskbar_scale_slider);
         com.google.android.material.slider.Slider gridHeaderScaleSlider = findViewById(R.id.grid_header_scale_slider);
         com.google.android.material.slider.Slider taskbarIconCountSlider = findViewById(R.id.taskbar_icon_count_slider);
+        MaterialSwitch reverseBubbleSwitch = findViewById(R.id.reverse_bubble_switch);
 
         return new SettingsState(
             taskbarSwitch != null && taskbarSwitch.isChecked() ? "1" : "0",
             mobileRecentsSwitch != null && mobileRecentsSwitch.isChecked(),
             taskbarScaleSlider != null ? (int) taskbarScaleSlider.getValue() : 100,
             gridHeaderScaleSlider != null ? (int) gridHeaderScaleSlider.getValue() : 70,
-            taskbarIconCountSlider != null ? (int) taskbarIconCountSlider.getValue() : 4
+            taskbarIconCountSlider != null ? (int) taskbarIconCountSlider.getValue() : 4,
+            reverseBubbleSwitch != null && reverseBubbleSwitch.isChecked(),
+            pendingDismissPosition
         );
     }
 
@@ -502,6 +533,13 @@ public class MainActivity extends AppCompatActivity {
             taskbarIconCountSlider.setEnabled(isEnabled);
         }
 
+        MaterialSwitch reverseBubbleSwitch = findViewById(R.id.reverse_bubble_switch);
+        if (reverseBubbleSwitch != null) {
+            reverseBubbleSwitch.setChecked(state.reverseBubble);
+        }
+        pendingDismissPosition = state.dismissPosition;
+        updateDismissPositionDesc();
+
         currentUIState = state;
         isRestoringState = false;
 
@@ -512,6 +550,46 @@ public class MainActivity extends AppCompatActivity {
     // =========================================================================
     // MARK: UI METHODS & BOTTOM SHEETS
     // =========================================================================
+
+    private void updateDismissPositionDesc() {
+        TextView tvDesc = findViewById(R.id.tv_dismiss_position_desc);
+        if (tvDesc == null) return;
+        switch (pendingDismissPosition) {
+            case "TOP_MIDDLE": tvDesc.setText("Top Middle"); break;
+            case "LEFT_MIDDLE": tvDesc.setText("Left Middle"); break;
+            case "RIGHT_MIDDLE": tvDesc.setText("Right Middle"); break;
+            case "CENTER": tvDesc.setText("Center"); break;
+            default: tvDesc.setText("Bottom Middle (Default)"); break;
+        }
+    }
+
+    private void showDismissPositionBottomSheet() {
+        android.view.View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dismiss_position, null);
+        com.google.android.material.bottomsheet.BottomSheetDialog dialog = new com.google.android.material.bottomsheet.BottomSheetDialog(this);
+        dialog.setContentView(sheetView);
+
+        android.widget.RadioGroup radioGroup = sheetView.findViewById(R.id.radio_group_dismiss_position);
+        if (radioGroup != null) {
+            if ("TOP_MIDDLE".equals(pendingDismissPosition)) radioGroup.check(R.id.radio_dismiss_top);
+            else if ("LEFT_MIDDLE".equals(pendingDismissPosition)) radioGroup.check(R.id.radio_dismiss_left);
+            else if ("RIGHT_MIDDLE".equals(pendingDismissPosition)) radioGroup.check(R.id.radio_dismiss_right);
+            else if ("CENTER".equals(pendingDismissPosition)) radioGroup.check(R.id.radio_dismiss_center);
+            else radioGroup.check(R.id.radio_dismiss_bottom);
+
+            radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+                if (checkedId == R.id.radio_dismiss_top) pendingDismissPosition = "TOP_MIDDLE";
+                else if (checkedId == R.id.radio_dismiss_left) pendingDismissPosition = "LEFT_MIDDLE";
+                else if (checkedId == R.id.radio_dismiss_right) pendingDismissPosition = "RIGHT_MIDDLE";
+                else if (checkedId == R.id.radio_dismiss_center) pendingDismissPosition = "CENTER";
+                else pendingDismissPosition = "BOTTOM_MIDDLE";
+                
+                updateDismissPositionDesc();
+                setButtonEnabled(true);
+                dialog.dismiss();
+            });
+        }
+        dialog.show();
+    }
 
     private void updateHeaderIcon() {
         android.widget.ImageView headerIcon = findViewById(R.id.header_app_icon);

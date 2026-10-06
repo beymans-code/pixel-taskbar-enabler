@@ -339,7 +339,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="24dp"
                 android:orientation="vertical">
 
                 <!-- Mobile Recents Switch Item -->
@@ -482,42 +482,116 @@
                 android:textSize="16sp"
                 app:fontFamily="@font/bebas_neue_regular" />
 
+            <!-- Bubble Layout Switch Item -->
             <com.google.android.material.card.MaterialCardView
                 style="?attr/materialCardViewFilledStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="2dp"
                 app:cardBackgroundColor="?attr/colorSurfaceBright"
-                app:cardElevation="0dp">
+                app:cardElevation="0dp"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.MyApp.ListItem.Top">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:baselineAligned="false"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="12dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:text="Dismiss Position (X)" />
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="16dp"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/mode_off_on"
+                        app:tint="?attr/colorPrimary" />
 
-                    <RadioGroup
-                        android:id="@+id/radio_group_dismiss_position"
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
                         android:orientation="vertical">
 
-                        <RadioButton android:id="@+id/radio_dismiss_bottom" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bottom Middle (Default)" />
-                        <RadioButton android:id="@+id/radio_dismiss_top" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Top Middle" />
-                        <RadioButton android:id="@+id/radio_dismiss_left" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Left Middle" />
-                        <RadioButton android:id="@+id/radio_dismiss_right" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Right Middle" />
-                        <RadioButton android:id="@+id/radio_dismiss_center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Center" />
-                    </RadioGroup>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Enable Reverse Layout"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Move bubbles to bottom"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/reverse_bubble_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        tools:ignore="DuplicateSpeakableTextCheck" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Dismiss Position Item -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_dismiss_position"
+                style="?attr/materialCardViewFilledStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="?attr/colorSurfaceBright"
+                app:cardElevation="0dp"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.MyApp.ListItem.Bottom">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="12dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="16dp"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/settings_overscan"
+                        app:tint="?attr/colorPrimary" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Dismiss Position"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_dismiss_position_desc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Bottom Middle"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textSize="14sp" />
+                    </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

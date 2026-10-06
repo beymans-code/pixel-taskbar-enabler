@@ -24,10 +24,17 @@ public class SystemUiActivator extends XposedModPack {
     @SuppressLint("DiscouragedApi")
     @Override
     public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
-        ReverseBubbleLayoutMod reverseBubbleLayoutMod = new ReverseBubbleLayoutMod(mContext);
-        reverseBubbleLayoutMod.applyHooks();
+        boolean enableReverseBubble = false;
+        if (dev.beyman.pixeltaskbarenabler.xposed.XPrefs.Xprefs != null) {
+            enableReverseBubble = dev.beyman.pixeltaskbarenabler.xposed.XPrefs.Xprefs.getBoolean("enable_reverse_bubble", false);
+        }
 
-        DismissPositionMod dismissPositionMod = new DismissPositionMod(mContext);
-        dismissPositionMod.applyHooks();
+        if (enableReverseBubble) {
+            ReverseBubbleLayoutMod reverseBubbleLayoutMod = new ReverseBubbleLayoutMod(mContext);
+            reverseBubbleLayoutMod.applyHooks();
+
+            DismissPositionMod dismissPositionMod = new DismissPositionMod(mContext);
+            dismissPositionMod.applyHooks();
+        }
     }
 }
