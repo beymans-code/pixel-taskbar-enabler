@@ -1,0 +1,11 @@
+{
+  "taskBarMode": "0",
+  "taskbar_scale": 90,
+  "grid_header_scale": 70,
+  "mobile_header_scale": 100,
+  "taskbar_icon_count": 4,
+  "mobile_recents": false,
+  "enable_recents_grid": false,
+  "dismiss_position": "CENTER",
+  "enable_reverse_bubble": false
+}

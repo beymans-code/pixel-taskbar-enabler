@@ -30,7 +30,7 @@ public class DismissPositionMod {
     public DismissPositionMod(Context context) {
         this.mContext = context;
         if (dev.beyman.pixeltaskbarenabler.xposed.XPrefs.Xprefs != null) {
-            String positionStr = dev.beyman.pixeltaskbarenabler.xposed.XPrefs.Xprefs.getString("dismiss_position", "BOTTOM_MIDDLE");
+            String positionStr = dev.beyman.pixeltaskbarenabler.xposed.XPrefs.Xprefs.getString("dismiss_position", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getString("dismiss_position"));
             try {
                 mPosition = DismissPosition.valueOf(positionStr);
             } catch (Exception e) {

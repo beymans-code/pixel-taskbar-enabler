@@ -34,15 +34,17 @@ public class MainActivity extends AppCompatActivity {
         boolean mobileRecents;
         int taskbarScale;
         int gridHeaderScale;
+        int mobileHeaderScale;
         int taskbarIconCount;
         boolean reverseBubble;
         String dismissPosition;
 
-        SettingsState(String taskBarMode, boolean mobileRecents, int taskbarScale, int gridHeaderScale, int taskbarIconCount, boolean reverseBubble, String dismissPosition) {
+        SettingsState(String taskBarMode, boolean mobileRecents, int taskbarScale, int gridHeaderScale, int mobileHeaderScale, int taskbarIconCount, boolean reverseBubble, String dismissPosition) {
             this.taskBarMode = taskBarMode;
             this.mobileRecents = mobileRecents;
             this.taskbarScale = taskbarScale;
             this.gridHeaderScale = gridHeaderScale;
+            this.mobileHeaderScale = mobileHeaderScale;
             this.taskbarIconCount = taskbarIconCount;
             this.reverseBubble = reverseBubble;
             this.dismissPosition = dismissPosition;
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton btnApplyChanges;
     FloatingActionButton fabMainToggle;
     
-    private String pendingDismissPosition = "BOTTOM_MIDDLE";
+    private String pendingDismissPosition = dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getString("dismiss_position");
 
     // =========================================================================
     // MARK: LIFECYCLE METHODS
@@ -143,19 +145,22 @@ public class MainActivity extends AppCompatActivity {
             MaterialSwitch currentMobileRecentsSwitch = findViewById(R.id.mobile_recents_switch);
             com.google.android.material.slider.Slider currentTaskbarScaleSlider = findViewById(R.id.taskbar_scale_slider);
             com.google.android.material.slider.Slider currentGridHeaderScaleSlider = findViewById(R.id.grid_header_scale_slider);
+            com.google.android.material.slider.Slider currentMobileHeaderScaleSlider = findViewById(R.id.mobile_header_scale_slider);
             com.google.android.material.slider.Slider currentTaskbarIconCountSlider = findViewById(R.id.taskbar_icon_count_slider);
 
-            String oldTaskBarMode = prefsProtected.getString("taskBarMode", "0");
-            int oldTaskbarScale = prefsProtected.getInt("taskbar_scale", 100);
-            int oldHeaderScale = prefsProtected.getInt("grid_header_scale", 70);
-            int oldIconCount = prefsProtected.getInt("taskbar_icon_count", 4);
-            boolean oldMobileRecents = prefsProtected.getBoolean("mobile_recents", false);
-            String oldDismissPosition = prefsProtected.getString("dismiss_position", "BOTTOM_MIDDLE");
-            boolean oldReverseBubble = prefsProtected.getBoolean("enable_reverse_bubble", false);
+            String oldTaskBarMode = prefsProtected.getString("taskBarMode", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getString("taskBarMode"));
+            int oldTaskbarScale = prefsProtected.getInt("taskbar_scale", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getInt("taskbar_scale"));
+            int oldHeaderScale = prefsProtected.getInt("grid_header_scale", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getInt("grid_header_scale"));
+            int oldMobileHeaderScale = prefsProtected.getInt("mobile_header_scale", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getInt("mobile_header_scale"));
+            int oldIconCount = prefsProtected.getInt("taskbar_icon_count", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getInt("taskbar_icon_count"));
+            boolean oldMobileRecents = prefsProtected.getBoolean("mobile_recents", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getBoolean("mobile_recents"));
+            String oldDismissPosition = prefsProtected.getString("dismiss_position", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getString("dismiss_position"));
+            boolean oldReverseBubble = prefsProtected.getBoolean("enable_reverse_bubble", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getBoolean("enable_reverse_bubble"));
 
             String newTaskBarMode = currentTaskbarSwitch.isChecked() ? "1" : "0";
             int newTaskbarScale = (int) currentTaskbarScaleSlider.getValue();
             int newHeaderScale = (int) currentGridHeaderScaleSlider.getValue();
+            int newMobileHeaderScale = currentMobileHeaderScaleSlider != null ? (int) currentMobileHeaderScaleSlider.getValue() : 70;
             int newIconCount = (int) currentTaskbarIconCountSlider.getValue();
             boolean newMobileRecents = currentMobileRecentsSwitch.isChecked();
             
@@ -185,6 +190,13 @@ public class MainActivity extends AppCompatActivity {
                 editorNormal.putInt("grid_header_scale", newHeaderScale);
                 editorProtected.putInt("grid_header_scale", newHeaderScale);
                 logMessage(R.string.header_scale_saved, newHeaderScale);
+                changed = true;
+            }
+
+            if (newMobileHeaderScale != oldMobileHeaderScale) {
+                editorNormal.putInt("mobile_header_scale", newMobileHeaderScale);
+                editorProtected.putInt("mobile_header_scale", newMobileHeaderScale);
+                logMessage(R.string.header_scale_saved, newMobileHeaderScale);
                 changed = true;
             }
 
@@ -255,13 +267,21 @@ public class MainActivity extends AppCompatActivity {
         prefsNormal = getSharedPreferences(prefName, MODE_PRIVATE);
         prefsProtected = createDeviceProtectedStorageContext().getSharedPreferences(prefName, MODE_PRIVATE);
 
+        int lastShownChangelog = prefsNormal.getInt("last_shown_changelog_version", 0);
+        int currentVersionCode = BuildConfig.VERSION_CODE;
+        if (lastShownChangelog < currentVersionCode) {
+            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(this::showChangelogDialog, 2500);
+            prefsNormal.edit().putInt("last_shown_changelog_version", currentVersionCode).apply();
+            prefsProtected.edit().putInt("last_shown_changelog_version", currentVersionCode).apply();
+        }
+
         logManager = new LogManager(this, prefsProtected, prefsNormal);
 
         // Since logs view is not immediately available, we don't need to populate logTextView here.
         // It will be populated when showLogsBottomSheet() is called.
 
         // TaskbarActivator reads taskBarMode as String! "1" is ON, "0" is OFF
-        String currentMode = prefsProtected.getString("taskBarMode", "0");
+        String currentMode = prefsProtected.getString("taskBarMode", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getString("taskBarMode"));
         boolean isEnabled = "1".equals(currentMode);
 
         MaterialSwitch mobileRecentsSwitch = findViewById(R.id.mobile_recents_switch);
@@ -269,13 +289,15 @@ public class MainActivity extends AppCompatActivity {
         taskbarSwitch.setChecked(isEnabled);
         mobileRecentsSwitch.setEnabled(isEnabled);
 
-        boolean isMobileRecentsEnabled = prefsProtected.getBoolean("mobile_recents", false);
+        boolean isMobileRecentsEnabled = prefsProtected.getBoolean("mobile_recents", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getBoolean("mobile_recents"));
         mobileRecentsSwitch.setChecked(isMobileRecentsEnabled);
+        
+
 
         MaterialSwitch reverseBubbleSwitch = findViewById(R.id.reverse_bubble_switch);
         com.google.android.material.card.MaterialCardView cardDismissPosition = findViewById(R.id.card_dismiss_position);
 
-        boolean isReverseBubbleEnabled = prefsProtected.getBoolean("enable_reverse_bubble", false);
+        boolean isReverseBubbleEnabled = prefsProtected.getBoolean("enable_reverse_bubble", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getBoolean("enable_reverse_bubble"));
         if (reverseBubbleSwitch != null) {
             reverseBubbleSwitch.setChecked(isReverseBubbleEnabled);
             if (cardDismissPosition != null) {
@@ -286,16 +308,13 @@ public class MainActivity extends AppCompatActivity {
                 vibrate(buttonView, VibrateType.CLOCK_TICK);
                 if (isRestoringState) return;
                 saveStateForUndo();
-                if (cardDismissPosition != null) {
-                    cardDismissPosition.setEnabled(isChecked);
-                    cardDismissPosition.setAlpha(isChecked ? 1.0f : 0.5f);
-                }
+                updateSecondaryContainersAlpha(taskbarSwitch.isChecked(), isChecked);
                 setButtonEnabled(true);
                 updateCurrentUIState();
             });
         }
 
-        pendingDismissPosition = prefsProtected.getString("dismiss_position", "BOTTOM_MIDDLE");
+        pendingDismissPosition = prefsProtected.getString("dismiss_position", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getString("dismiss_position"));
         updateDismissPositionDesc();
 
         if (cardDismissPosition != null) {
@@ -307,27 +326,35 @@ public class MainActivity extends AppCompatActivity {
 
         com.google.android.material.slider.Slider taskbarScaleSlider = findViewById(R.id.taskbar_scale_slider);
         TextView taskbarScaleLabel = findViewById(R.id.taskbar_scale_label);
-        int currentTaskbarScale = prefsProtected.getInt("taskbar_scale", 100);
+        int currentTaskbarScale = prefsProtected.getInt("taskbar_scale", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getInt("taskbar_scale"));
         taskbarScaleSlider.setValue(currentTaskbarScale);
         taskbarScaleLabel.setText(getString(R.string.taskbar_scale_label_format, currentTaskbarScale));
         taskbarScaleSlider.setEnabled(isEnabled);
 
         com.google.android.material.slider.Slider gridHeaderScaleSlider = findViewById(R.id.grid_header_scale_slider);
         TextView gridHeaderScaleLabel = findViewById(R.id.grid_header_scale_label);
-        int currentGridHeaderScale = prefsProtected.getInt("grid_header_scale", 70);
+        int currentGridHeaderScale = prefsProtected.getInt("grid_header_scale", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getInt("grid_header_scale"));
         gridHeaderScaleSlider.setValue(currentGridHeaderScale);
         gridHeaderScaleLabel.setText(getString(R.string.grid_header_scale_label_format, currentGridHeaderScale));
-        gridHeaderScaleSlider.setEnabled(isEnabled);
+        
+        com.google.android.material.slider.Slider mobileHeaderScaleSlider = findViewById(R.id.mobile_header_scale_slider);
+        TextView mobileHeaderScaleLabel = findViewById(R.id.mobile_header_scale_label);
+        int currentMobileHeaderScale = prefsProtected.getInt("mobile_header_scale", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getInt("mobile_header_scale"));
+        if (mobileHeaderScaleSlider != null) {
+            mobileHeaderScaleSlider.setValue(currentMobileHeaderScale);
+            mobileHeaderScaleLabel.setText(getString(R.string.mobile_header_scale_label_format, currentMobileHeaderScale));
+        }
 
         com.google.android.material.slider.Slider taskbarIconCountSlider = findViewById(R.id.taskbar_icon_count_slider);
         TextView taskbarIconCountLabel = findViewById(R.id.taskbar_icon_count_label);
-        int currentIconCount = prefsProtected.getInt("taskbar_icon_count", 4);
+        int currentIconCount = prefsProtected.getInt("taskbar_icon_count", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getInt("taskbar_icon_count"));
         taskbarIconCountSlider.setValue(currentIconCount);
         taskbarIconCountLabel.setText(getString(R.string.taskbar_icon_count_label_format, currentIconCount));
         taskbarIconCountSlider.setEnabled(isEnabled);
 
         setupSliderTouchInterception(taskbarScaleSlider);
         setupSliderTouchInterception(gridHeaderScaleSlider);
+        setupSliderTouchInterception(mobileHeaderScaleSlider);
         setupSliderTouchInterception(taskbarIconCountSlider);
 
         taskbarSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -336,11 +363,14 @@ public class MainActivity extends AppCompatActivity {
             saveStateForUndo();
 
             mobileRecentsSwitch.setEnabled(isChecked);
-            taskbarScaleSlider.setEnabled(isChecked);
-            gridHeaderScaleSlider.setEnabled(isChecked);
-            taskbarIconCountSlider.setEnabled(isChecked);
+            
+            if (taskbarScaleSlider != null) taskbarScaleSlider.setEnabled(isChecked);
+            
+            if (taskbarIconCountSlider != null) taskbarIconCountSlider.setEnabled(isChecked);
 
-            String currentVal = prefsProtected.getString("taskBarMode", "0");
+            updateSecondaryContainersAlpha(isChecked, reverseBubbleSwitch != null && reverseBubbleSwitch.isChecked());
+
+            String currentVal = prefsProtected.getString("taskBarMode", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getString("taskBarMode"));
             boolean currentlyEnabled = "1".equals(currentVal);
             if (isChecked != currentlyEnabled) {
                 setButtonEnabled(true);
@@ -363,7 +393,7 @@ public class MainActivity extends AppCompatActivity {
             public void onStopTrackingTouch(@androidx.annotation.NonNull com.google.android.material.slider.Slider slider) {
                 vibrate(slider, VibrateType.CLOCK_TICK);
                 int val = (int) slider.getValue();
-                int currentVal = prefsProtected.getInt("taskbar_scale", 100);
+                int currentVal = prefsProtected.getInt("taskbar_scale", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getInt("taskbar_scale"));
                 if (val != currentVal) {
                     setButtonEnabled(true);
                 }
@@ -386,13 +416,38 @@ public class MainActivity extends AppCompatActivity {
             public void onStopTrackingTouch(@androidx.annotation.NonNull com.google.android.material.slider.Slider slider) {
                 vibrate(slider, VibrateType.CLOCK_TICK);
                 int val = (int) slider.getValue();
-                int currentVal = prefsProtected.getInt("grid_header_scale", 70);
+                int currentVal = prefsProtected.getInt("grid_header_scale", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getInt("grid_header_scale"));
                 if (val != currentVal) {
                     setButtonEnabled(true);
                 }
                 updateCurrentUIState();
             }
         });
+
+        if (mobileHeaderScaleSlider != null) {
+            mobileHeaderScaleSlider.addOnChangeListener((slider, value, fromUser) -> {
+                mobileHeaderScaleLabel.setText(getString(R.string.mobile_header_scale_label_format, (int) value));
+                if (fromUser) vibrate(slider, VibrateType.CLOCK_TICK);
+            });
+
+            mobileHeaderScaleSlider.addOnSliderTouchListener(new com.google.android.material.slider.Slider.OnSliderTouchListener() {
+                @Override
+                public void onStartTrackingTouch(@androidx.annotation.NonNull com.google.android.material.slider.Slider slider) {
+                    saveStateForUndo();
+                }
+
+                @Override
+                public void onStopTrackingTouch(@androidx.annotation.NonNull com.google.android.material.slider.Slider slider) {
+                    vibrate(slider, VibrateType.CLOCK_TICK);
+                    int val = (int) slider.getValue();
+                    int currentVal = prefsProtected.getInt("mobile_header_scale", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getInt("mobile_header_scale"));
+                    if (val != currentVal) {
+                        setButtonEnabled(true);
+                    }
+                    updateCurrentUIState();
+                }
+            });
+        }
 
         taskbarIconCountSlider.addOnChangeListener((slider, value, fromUser) -> {
             taskbarIconCountLabel.setText(getString(R.string.taskbar_icon_count_label_format, (int) value));
@@ -409,7 +464,7 @@ public class MainActivity extends AppCompatActivity {
             public void onStopTrackingTouch(@androidx.annotation.NonNull com.google.android.material.slider.Slider slider) {
                 vibrate(slider, VibrateType.CLOCK_TICK);
                 int val = (int) slider.getValue();
-                int currentVal = prefsProtected.getInt("taskbar_icon_count", 4);
+                int currentVal = prefsProtected.getInt("taskbar_icon_count", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getInt("taskbar_icon_count"));
                 if (val != currentVal) {
                     setButtonEnabled(true);
                 }
@@ -422,7 +477,9 @@ public class MainActivity extends AppCompatActivity {
             if (isRestoringState) return;
             saveStateForUndo();
 
-            boolean currentVal = prefsProtected.getBoolean("mobile_recents", false);
+            updateSecondaryContainersAlpha(taskbarSwitch.isChecked(), reverseBubbleSwitch != null && reverseBubbleSwitch.isChecked());
+
+            boolean currentVal = prefsProtected.getBoolean("mobile_recents", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getBoolean("mobile_recents"));
             if (isChecked != currentVal) {
                 setButtonEnabled(true);
             }
@@ -460,6 +517,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         updateHeaderIcon();
+        updateSecondaryContainersAlpha(isEnabled, isReverseBubbleEnabled);
         currentUIState = getUiState();
     }
 
@@ -474,6 +532,7 @@ public class MainActivity extends AppCompatActivity {
         MaterialSwitch mobileRecentsSwitch = findViewById(R.id.mobile_recents_switch);
         com.google.android.material.slider.Slider taskbarScaleSlider = findViewById(R.id.taskbar_scale_slider);
         com.google.android.material.slider.Slider gridHeaderScaleSlider = findViewById(R.id.grid_header_scale_slider);
+        com.google.android.material.slider.Slider mobileHeaderScaleSlider = findViewById(R.id.mobile_header_scale_slider);
         com.google.android.material.slider.Slider taskbarIconCountSlider = findViewById(R.id.taskbar_icon_count_slider);
         MaterialSwitch reverseBubbleSwitch = findViewById(R.id.reverse_bubble_switch);
 
@@ -482,6 +541,7 @@ public class MainActivity extends AppCompatActivity {
             mobileRecentsSwitch != null && mobileRecentsSwitch.isChecked(),
             taskbarScaleSlider != null ? (int) taskbarScaleSlider.getValue() : 100,
             gridHeaderScaleSlider != null ? (int) gridHeaderScaleSlider.getValue() : 70,
+            mobileHeaderScaleSlider != null ? (int) mobileHeaderScaleSlider.getValue() : 70,
             taskbarIconCountSlider != null ? (int) taskbarIconCountSlider.getValue() : 4,
             reverseBubbleSwitch != null && reverseBubbleSwitch.isChecked(),
             pendingDismissPosition
@@ -509,6 +569,7 @@ public class MainActivity extends AppCompatActivity {
         MaterialSwitch mobileRecentsSwitch = findViewById(R.id.mobile_recents_switch);
         com.google.android.material.slider.Slider taskbarScaleSlider = findViewById(R.id.taskbar_scale_slider);
         com.google.android.material.slider.Slider gridHeaderScaleSlider = findViewById(R.id.grid_header_scale_slider);
+        com.google.android.material.slider.Slider mobileHeaderScaleSlider = findViewById(R.id.mobile_header_scale_slider);
         com.google.android.material.slider.Slider taskbarIconCountSlider = findViewById(R.id.taskbar_icon_count_slider);
 
         boolean isEnabled = "1".equals(state.taskBarMode);
@@ -525,7 +586,10 @@ public class MainActivity extends AppCompatActivity {
 
         if (gridHeaderScaleSlider != null) {
             gridHeaderScaleSlider.setValue(state.gridHeaderScale);
-            gridHeaderScaleSlider.setEnabled(isEnabled);
+        }
+
+        if (mobileHeaderScaleSlider != null) {
+            mobileHeaderScaleSlider.setValue(state.mobileHeaderScale);
         }
 
         if (taskbarIconCountSlider != null) {
@@ -540,11 +604,70 @@ public class MainActivity extends AppCompatActivity {
         pendingDismissPosition = state.dismissPosition;
         updateDismissPositionDesc();
 
+        updateSecondaryContainersAlpha(isEnabled, state.reverseBubble);
+
         currentUIState = state;
         isRestoringState = false;
 
         setButtonEnabled(true);
         updateUndoRedoButtons();
+    }
+
+    private void updateSecondaryContainersAlpha(boolean isEnabled, boolean isReverseBubble) {
+        float alpha = isEnabled ? 1.0f : 0.5f;
+
+        com.google.android.material.card.MaterialCardView cardTaskbarIconCount = findViewById(R.id.card_taskbar_icon_count);
+        if (cardTaskbarIconCount != null) {
+            cardTaskbarIconCount.setAlpha(alpha);
+            cardTaskbarIconCount.setEnabled(isEnabled);
+        }
+        com.google.android.material.card.MaterialCardView cardTaskbarScale = findViewById(R.id.card_taskbar_scale);
+        if (cardTaskbarScale != null) {
+            cardTaskbarScale.setAlpha(alpha);
+            cardTaskbarScale.setEnabled(isEnabled);
+        }
+        com.google.android.material.card.MaterialCardView cardMobileRecents = findViewById(R.id.card_mobile_recents);
+        if (cardMobileRecents != null) {
+            cardMobileRecents.setAlpha(alpha);
+            cardMobileRecents.setEnabled(isEnabled);
+        }
+        
+        MaterialSwitch mobileRecentsSwitch = findViewById(R.id.mobile_recents_switch);
+        boolean isMobileRecents = mobileRecentsSwitch != null && mobileRecentsSwitch.isChecked();
+        boolean gridHeaderEnabled = isEnabled && !isMobileRecents;
+        boolean mobileHeaderEnabled = isEnabled && isMobileRecents;
+        
+        com.google.android.material.card.MaterialCardView cardGridHeaderScale = findViewById(R.id.card_grid_header_scale);
+        if (cardGridHeaderScale != null) {
+            cardGridHeaderScale.setAlpha(gridHeaderEnabled ? 1.0f : 0.5f);
+            cardGridHeaderScale.setEnabled(gridHeaderEnabled);
+        }
+        com.google.android.material.slider.Slider gridHeaderScaleSlider = findViewById(R.id.grid_header_scale_slider);
+        if (gridHeaderScaleSlider != null) {
+            gridHeaderScaleSlider.setEnabled(gridHeaderEnabled);
+        }
+
+        com.google.android.material.card.MaterialCardView cardMobileHeaderScale = findViewById(R.id.card_mobile_header_scale);
+        if (cardMobileHeaderScale != null) {
+            cardMobileHeaderScale.setAlpha(mobileHeaderEnabled ? 1.0f : 0.5f);
+            cardMobileHeaderScale.setEnabled(mobileHeaderEnabled);
+        }
+        com.google.android.material.slider.Slider mobileHeaderScaleSlider = findViewById(R.id.mobile_header_scale_slider);
+        if (mobileHeaderScaleSlider != null) {
+            mobileHeaderScaleSlider.setEnabled(mobileHeaderEnabled);
+        }
+        com.google.android.material.card.MaterialCardView cardReverseBubble = findViewById(R.id.card_reverse_bubble);
+        if (cardReverseBubble != null) {
+            cardReverseBubble.setAlpha(alpha);
+            cardReverseBubble.setEnabled(isEnabled);
+        }
+        
+        com.google.android.material.card.MaterialCardView cardDismissPosition = findViewById(R.id.card_dismiss_position);
+        if (cardDismissPosition != null) {
+            boolean dismissEnabled = isEnabled && isReverseBubble;
+            cardDismissPosition.setEnabled(dismissEnabled);
+            cardDismissPosition.setAlpha(dismissEnabled ? 1.0f : 0.5f);
+        }
     }
 
     // =========================================================================
@@ -555,11 +678,12 @@ public class MainActivity extends AppCompatActivity {
         TextView tvDesc = findViewById(R.id.tv_dismiss_position_desc);
         if (tvDesc == null) return;
         switch (pendingDismissPosition) {
-            case "TOP_MIDDLE": tvDesc.setText("Top Middle"); break;
-            case "LEFT_MIDDLE": tvDesc.setText("Left Middle"); break;
-            case "RIGHT_MIDDLE": tvDesc.setText("Right Middle"); break;
-            case "CENTER": tvDesc.setText("Center"); break;
-            default: tvDesc.setText("Bottom Middle (Default)"); break;
+            case "TOP_MIDDLE": tvDesc.setText(getString(R.string.dismiss_pos_top)); break;
+            case "LEFT_MIDDLE": tvDesc.setText(getString(R.string.dismiss_pos_left)); break;
+            case "RIGHT_MIDDLE": tvDesc.setText(getString(R.string.dismiss_pos_right)); break;
+            case "BOTTOM_MIDDLE": tvDesc.setText(getString(R.string.dismiss_pos_bottom)); break;
+            case "CENTER":
+            default: tvDesc.setText(getString(R.string.dismiss_pos_center)); break;
         }
     }
 
@@ -573,15 +697,15 @@ public class MainActivity extends AppCompatActivity {
             if ("TOP_MIDDLE".equals(pendingDismissPosition)) radioGroup.check(R.id.radio_dismiss_top);
             else if ("LEFT_MIDDLE".equals(pendingDismissPosition)) radioGroup.check(R.id.radio_dismiss_left);
             else if ("RIGHT_MIDDLE".equals(pendingDismissPosition)) radioGroup.check(R.id.radio_dismiss_right);
-            else if ("CENTER".equals(pendingDismissPosition)) radioGroup.check(R.id.radio_dismiss_center);
-            else radioGroup.check(R.id.radio_dismiss_bottom);
+            else if ("BOTTOM_MIDDLE".equals(pendingDismissPosition)) radioGroup.check(R.id.radio_dismiss_bottom);
+            else radioGroup.check(R.id.radio_dismiss_center);
 
             radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
                 if (checkedId == R.id.radio_dismiss_top) pendingDismissPosition = "TOP_MIDDLE";
                 else if (checkedId == R.id.radio_dismiss_left) pendingDismissPosition = "LEFT_MIDDLE";
                 else if (checkedId == R.id.radio_dismiss_right) pendingDismissPosition = "RIGHT_MIDDLE";
-                else if (checkedId == R.id.radio_dismiss_center) pendingDismissPosition = "CENTER";
-                else pendingDismissPosition = "BOTTOM_MIDDLE";
+                else if (checkedId == R.id.radio_dismiss_bottom) pendingDismissPosition = "BOTTOM_MIDDLE";
+                else pendingDismissPosition = dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getString("dismiss_position");
                 
                 updateDismissPositionDesc();
                 setButtonEnabled(true);
@@ -814,6 +938,55 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @android.annotation.SuppressLint("InflateParams")
+    private void showChangelogDialog() {
+        com.google.android.material.bottomsheet.BottomSheetDialog dialog = new com.google.android.material.bottomsheet.BottomSheetDialog(this);
+        android.view.View view = getLayoutInflater().inflate(R.layout.bottom_sheet_changelog, null);
+
+        android.widget.LinearLayout container = view.findViewById(R.id.changelog_container);
+
+        String changelog = getString(R.string.changelog_text);
+        String[] lines = changelog.split("\\n");
+
+        android.graphics.Typeface bebasFont = androidx.core.content.res.ResourcesCompat.getFont(this, R.font.bebas_neue_regular);
+
+        for (String line : lines) {
+            line = line.trim();
+            if (line.isEmpty()) continue;
+
+            if (line.startsWith("-")) {
+                String featureText = line.substring(1).trim();
+                android.view.View itemView = getLayoutInflater().inflate(R.layout.item_feature, container, false);
+                android.widget.TextView textView = itemView.findViewById(R.id.feature_text);
+                if (textView != null) {
+                    textView.setText(featureText);
+                }
+                container.addView(itemView);
+            } else {
+                android.widget.TextView titleView = new android.widget.TextView(this);
+                titleView.setText(line);
+                if (bebasFont != null) titleView.setTypeface(bebasFont);
+                titleView.setTextSize(20f);
+                
+                android.util.TypedValue typedValue = new android.util.TypedValue();
+                getTheme().resolveAttribute(com.google.android.material.R.attr.colorOnSurface, typedValue, true);
+                titleView.setTextColor(typedValue.data);
+
+                android.widget.LinearLayout.LayoutParams params = new android.widget.LinearLayout.LayoutParams(
+                        android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 
+                        android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+                params.topMargin = container.getChildCount() == 0 ? 0 : (int)(16 * getResources().getDisplayMetrics().density);
+                params.bottomMargin = (int)(8 * getResources().getDisplayMetrics().density);
+                titleView.setLayoutParams(params);
+
+                container.addView(titleView);
+            }
+        }
+
+        dialog.setContentView(view);
+        dialog.show();
+    }
+
+    @android.annotation.SuppressLint("InflateParams")
     private void showAboutBottomSheet() {
         com.google.android.material.bottomsheet.BottomSheetDialog dialog = new com.google.android.material.bottomsheet.BottomSheetDialog(this);
         android.view.View view = getLayoutInflater().inflate(R.layout.bottom_sheet_about, null);
@@ -822,6 +995,11 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://beyman.dev"));
             startActivity(intent);
             dialog.dismiss();
+        });
+
+        view.findViewById(R.id.btnShowChangelog).setOnClickListener(v -> {
+            dialog.dismiss();
+            showChangelogDialog();
         });
 
         view.findViewById(R.id.btnCreditPixelXpert).setOnClickListener(v -> {
@@ -848,7 +1026,9 @@ public class MainActivity extends AppCompatActivity {
                 getString(R.string.feature_1),
                 getString(R.string.feature_2),
                 getString(R.string.feature_3),
-                getString(R.string.feature_4)
+                getString(R.string.feature_4),
+                getString(R.string.feature_5),
+                getString(R.string.feature_6)
             };
 
             for (String feature : features) {
@@ -1024,6 +1204,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onTouch(android.view.View v, android.view.MotionEvent event) {
+                if (!v.isEnabled()) return false;
+                
                 int action = event.getActionMasked();
                 switch (action) {
                     case android.view.MotionEvent.ACTION_DOWN:

@@ -24,6 +24,7 @@ public class TaskbarSettings {
     public boolean mobileRecents = false;
     public float taskbarScale = 1.0f;
     public float gridHeaderScale = 0.70f;
+    public float mobileHeaderScale = 0.70f;
     public int taskbarIconCount = 4;
 
     public TaskbarSettings() {
@@ -38,11 +39,12 @@ public class TaskbarSettings {
      * @param key Array de claves modificadas (opcional).
      */
     public void update(String... key) {
-        taskbarMode = Integer.parseInt(Xprefs.getString("taskBarMode", String.valueOf(TASKBAR_DEFAULT)));
-        enableRecentsGrid = Xprefs.getBoolean("enable_recents_grid", false);
-        taskbarScale = Xprefs.getInt("taskbar_scale", 100) / 100f;
-        gridHeaderScale = Xprefs.getInt("grid_header_scale", 70) / 100f;
-        taskbarIconCount = Math.min(Xprefs.getInt("taskbar_icon_count", 4), 5);
-        mobileRecents = Xprefs.getBoolean("mobile_recents", false);
+        taskbarMode = Integer.parseInt(Xprefs.getString("taskBarMode", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getString("taskBarMode")));
+        enableRecentsGrid = Xprefs.getBoolean("enable_recents_grid", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getBoolean("enable_recents_grid"));
+        taskbarScale = Xprefs.getInt("taskbar_scale", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getInt("taskbar_scale")) / 100f;
+        gridHeaderScale = Xprefs.getInt("grid_header_scale", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getInt("grid_header_scale")) / 100f;
+        mobileHeaderScale = Xprefs.getInt("mobile_header_scale", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getInt("mobile_header_scale")) / 100f;
+        taskbarIconCount = Math.min(Xprefs.getInt("taskbar_icon_count", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getInt("taskbar_icon_count")), 5);
+        mobileRecents = Xprefs.getBoolean("mobile_recents", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getBoolean("mobile_recents"));
     }
 }

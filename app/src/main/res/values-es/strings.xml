@@ -9,8 +9,17 @@
     <!-- MainActivity Tabs & Titles -->
     <string name="taskbar_settings">Configuración de Taskbar</string>
     <string name="recents_settings">Configuración de Recientes</string>
+    <string name="bubbles_settings">CONFIGURACIÓN DE BURBUJAS RECIENTES</string>
 
     <!-- Switches & Settings -->
+    <string name="bottom_bubble_layout">Diseño Inferior</string>
+    <string name="bottom_bubble_layout_desc">Mover burbujas a la parte inferior</string>
+    <string name="dismiss_position">Posición de Cerrar</string>
+    <string name="dismiss_pos_bottom">Abajo al medio</string>
+    <string name="dismiss_pos_top">Arriba al medio</string>
+    <string name="dismiss_pos_left">Izquierda al medio</string>
+    <string name="dismiss_pos_right">Derecha al medio</string>
+    <string name="dismiss_pos_center">Centro (Por defecto)</string>
     <string name="enable_taskbar">Habilitar Android Taskbar</string>
     <string name="enable_taskbar_desc">Activa o desactiva la barra nativa</string>
     <string name="force_mobile_recents">Forzar Recientes en Móvil</string>
@@ -18,12 +27,14 @@
     <string name="icon_count_desc">Número máximo de aplicaciones en el dock</string>
     <string name="icon_scale_desc">Ajusta el tamaño de los iconos del dock</string>
     <string name="taskbar_scale_desc">Ajusta el tamaño general del taskbar</string>
-    <string name="grid_header_scale_desc">Modifica el tamaño en la vista de recientes</string>
+    <string name="grid_header_scale_desc">Modifica el tamaño en la vista grid de recientes</string>
+    <string name="mobile_header_scale_desc">Modifica el tamaño en la vista móvil de recientes</string>
 
     <!-- Formatted Labels -->
     <string name="icon_scale_label_format">Escala de Iconos: %1$d%%</string>
     <string name="taskbar_scale_label_format">Escala del Taskbar: %1$d%%</string>
     <string name="grid_header_scale_label_format">Escala de Encabezados (Grid): %1$d%%</string>
+    <string name="mobile_header_scale_label_format">Escala de Encabezados (Móvil): %1$d%%</string>
     <string name="taskbar_icon_count_label_format">Cantidad de Iconos: %1$d</string>
 
     <!-- Buttons -->
@@ -62,21 +73,31 @@
     <string name="key_features">Características Clave</string>
     <string name="website">Sitio web</string>
     <string name="credits_title">Créditos y Agradecimientos</string>
-    <string name="credits_intro">Este proyecto es posible gracias a las siguientes contribuciones de código abierto y equipos:</string>
-    <string name="credit_pixelxpert_desc">PixelXpert / AOSPMods: Equipo original (@siavash79 &amp; @ElTifo) de donde se tomó inspiración y código base.</string>
+    <string name="credits_intro">Este proyecto es posible gracias a las siguientes contribuciones de
+        código abierto y equipos:</string>
+    <string name="credit_pixelxpert_desc">PixelXpert / AOSPMods: Equipo original (@siavash79 &amp;
+        @ElTifo) de donde se tomó inspiración y código base.</string>
     <string name="credit_xposed_desc">XposedBridge: La creación original de Xposed por @rovo89.</string>
-    <string name="credit_vector_desc">Vector: El equipo de Vector (LSPosed) por mantener el entorno vivo.</string>
-    <string name="credit_google_desc">Google &amp; Android: El sistema operativo Android y el equipo de Google.</string>
+    <string name="credit_vector_desc">Vector: El equipo de Vector (LSPosed) por mantener el entorno
+        vivo.</string>
+    <string name="credit_google_desc">Google &amp; Android: El sistema operativo Android y el equipo
+        de Google.</string>
 
     <string name="feature_1">Activación de la Taskbar sin modificar el DPI global.</string>
     <string name="feature_2">Personalización de la escala de íconos y carpetas.</string>
     <string name="feature_3">Control sobre la cantidad de aplicaciones en el dock.</string>
     <string name="feature_4">Forzar el estilo de Recientes tipo tablet en móviles.</string>
+    <string name="feature_5">Diseño Inferior para mejor alcance de las burbujas.</string>
+    <string name="feature_6">Posición personalizable para el botón de cerrar burbujas.</string>
 
     <!-- Bottom Sheet Instructions -->
     <string name="instructions">Instrucciones</string>
-    <string name="instruction_0"><b>Prerrequisitos:</b>\n&#8226; Dispositivo Pixel rooteado (Magisk, KernelSU)\n&#8226; Entorno Zygisk activo\n&#8226; Entorno Xposed instalado (LSPosed, Vector, etc.)</string>
-    <string name="instruction_1">1. Abre Xposed (<a href="https://github.com/JingMatrix/Vector">JingMatrix/Vector</a>), activa el módulo y asegúrate de que \'Pixel Launcher\' esté marcado.</string>
+    <string name="instruction_0"><b>Prerrequisitos:</b>\n&#8226; Dispositivo Pixel rooteado (Magisk,
+        KernelSU)\n&#8226; Entorno Zygisk activo\n&#8226; Entorno Xposed instalado (LSPosed, Vector,
+        etc.)\n\n<b>Nota:</b> Para las funciones de burbujas, asegúrate de marcar <i>System UI</i>
+        en las opciones de Xposed.</string>
+    <string name="instruction_1">1. Abre Xposed (<a href="https://github.com/JingMatrix/Vector">
+        JingMatrix/Vector</a>), activa el módulo y asegúrate de que \'Pixel Launcher\' esté marcado.</string>
     <string name="instruction_2">2. Asegúrate de tener un entorno Zygisk (ej. <a
             href="https://github.com/JingMatrix/NeoZygisk">NeoZygisk</a>).</string>
     <string name="instruction_3">3. Concede permisos de root a Pixel Taskbar Enabler desde tu
@@ -107,5 +128,20 @@
     <string name="restarting_systemui">Reiniciando SystemUI&#8230;</string>
     <string name="systemui_restarted_success">SystemUI reiniciado con éxito.</string>
     <string name="error_root_denied">Error: Permisos Root no concedidos.</string>
+    <!-- Changelog -->
+    <string name="changelog_title">Registro de Cambios</string>
+    <string name="changelog_text">1.1.0\n
+- Opciones de diseño y posiciones de descarte personalizables para la burbuja\n
+- Posición inicial de la burbuja corregida y diseño inverso de multitarea añadido\n
+- Ajustes predeterminados, traducciones e instrucciones actualizadas\n
+\n
+1.0.1\n
+- Rediseño de interfaz con barra de navegación y opciones de escala\n
+- Lógica de escalado de íconos refactorizada y arreglos en la UI\n
+- Traducciones y documentación actualizadas\n
+\n
+1.0.0\n
+- Primera versión estable
+</string>
 
 </resources>

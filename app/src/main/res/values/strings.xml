@@ -10,8 +10,17 @@
     <!-- MainActivity Tabs & Titles -->
     <string name="taskbar_settings">Taskbar Settings</string>
     <string name="recents_settings">Recents Settings</string>
+    <string name="bubbles_settings">RECENT BUBBLES SETTINGS</string>
 
     <!-- Switches & Settings -->
+    <string name="bottom_bubble_layout">Bottom Layout</string>
+    <string name="bottom_bubble_layout_desc">Move bubbles to bottom</string>
+    <string name="dismiss_position">Dismiss Position</string>
+    <string name="dismiss_pos_bottom">Bottom Middle</string>
+    <string name="dismiss_pos_top">Top Middle</string>
+    <string name="dismiss_pos_left">Left Middle</string>
+    <string name="dismiss_pos_right">Right Middle</string>
+    <string name="dismiss_pos_center">Center (Default)</string>
     <string name="enable_taskbar">Enable Android Taskbar</string>
     <string name="enable_taskbar_desc">Enables or disables the native taskbar</string>
     <string name="force_mobile_recents">Force Mobile Recents</string>
@@ -19,12 +28,14 @@
     <string name="icon_count_desc">Maximum number of apps in the dock</string>
     <string name="icon_scale_desc">Adjusts the dock icon size</string>
     <string name="taskbar_scale_desc">Adjusts the overall taskbar size</string>
-    <string name="grid_header_scale_desc">Modifies the size in the recents view</string>
+    <string name="grid_header_scale_desc">Modifies the size in the grid recents view</string>
+    <string name="mobile_header_scale_desc">Modifies the size in the mobile recents view</string>
 
     <!-- Formatted Labels -->
     <string name="icon_scale_label_format">Icon Scale: %1$d%%</string>
     <string name="taskbar_scale_label_format">Taskbar Scale: %1$d%%</string>
     <string name="grid_header_scale_label_format">Grid Header Scale: %1$d%%</string>
+    <string name="mobile_header_scale_label_format">Mobile Header Scale: %1$d%%</string>
     <string name="taskbar_icon_count_label_format">Icon Count: %1$d</string>
 
     <!-- Buttons -->
@@ -75,10 +86,12 @@
     <string name="feature_2">Icon and folder scale customization.</string>
     <string name="feature_3">Control over the number of apps in the dock.</string>
     <string name="feature_4">Force tablet-style Recents layout on mobile.</string>
+    <string name="feature_5">Bottom Layout for easier thumb access.</string>
+    <string name="feature_6">Customizable Bubbles Dismiss Position.</string>
 
     <!-- Bottom Sheet Instructions -->
     <string name="instructions">Instructions</string>
-    <string name="instruction_0"><b>Prerequisites:</b>\n&#8226; Rooted Pixel device (Magisk, KernelSU)\n&#8226; Active Zygisk environment\n&#8226; Xposed framework installed (LSPosed, Vector, etc.)</string>
+    <string name="instruction_0"><b>Prerequisites:</b>\n&#8226; Rooted Pixel device (Magisk, KernelSU)\n&#8226; Active Zygisk environment\n&#8226; Xposed framework installed (LSPosed, Vector, etc.)\n\n<b>Note:</b> For bubble features, make sure <i>System UI</i> is checked in your Xposed manager scope.</string>
     <string name="instruction_1">1. Open Xposed (<a href="https://github.com/JingMatrix/Vector">JingMatrix/Vector</a>), enable the module and ensure \'Pixel Launcher\' is checked.</string>
     <string name="instruction_2">2. Ensure a Zygisk environment (e.g., <a
             href="https://github.com/JingMatrix/NeoZygisk">NeoZygisk</a>).</string>
@@ -107,5 +120,20 @@
     <string name="restarting_systemui">Restarting SystemUI&#8230;</string>
     <string name="systemui_restarted_success">SystemUI restarted successfully.</string>
     <string name="error_root_denied">Error: Root permissions denied.</string>
+    <!-- Changelog -->
+    <string name="changelog_title">Changelog</string>
+    <string name="changelog_text">1.1.0\n
+- Customizable floating bubble layouts and dismiss positions\n
+- Fixed bubble initial position and added reverse multitasking layout\n
+- Updated default settings, translations, and instructions\n
+\n
+1.0.1\n
+- UI redesign with navbar and taskbar scaling options\n
+- Refactored icon scaling logic and UI fixes\n
+- Added missing translations and updated documentation\n
+\n
+1.0.0\n
+- Initial stable release
+</string>
 
 </resources>

@@ -185,15 +185,14 @@ public class RecentsMod extends BaseLauncherMod {
             TaskViewClass.after("onLayout").run(param -> {
                 try {
                     boolean isGridTask = (boolean) callMethod(param.thisObject, "isGridTask");
-                    if (isGridTask) {
-                        java.util.List<?> taskContainers = (java.util.List<?>) callMethod(param.thisObject, "getTaskContainers");
-                        if (taskContainers != null) {
-                            for (Object container : taskContainers) {
-                                android.view.View iconView = (android.view.View) callMethod(container, "getIconView");
-                                if (iconView != null) {
-                                    iconView.setScaleX(mSettings.gridHeaderScale);
-                                    iconView.setScaleY(mSettings.gridHeaderScale);
-                                }
+                    float scale = isGridTask ? mSettings.gridHeaderScale : mSettings.mobileHeaderScale;
+                    java.util.List<?> taskContainers = (java.util.List<?>) callMethod(param.thisObject, "getTaskContainers");
+                    if (taskContainers != null) {
+                        for (Object container : taskContainers) {
+                            android.view.View iconView = (android.view.View) callMethod(container, "getIconView");
+                            if (iconView != null) {
+                                iconView.setScaleX(scale);
+                                iconView.setScaleY(scale);
                             }
                         }
                     }

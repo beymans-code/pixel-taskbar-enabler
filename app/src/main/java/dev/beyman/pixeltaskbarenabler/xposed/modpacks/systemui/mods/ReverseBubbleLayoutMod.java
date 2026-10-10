@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -250,5 +251,20 @@ public class ReverseBubbleLayoutMod {
                 "updateBubbleOrderInternal", "updateBubbleShadows"}) {
             stackViewClass.after(method).run(param -> scheduleSelectedScale(param.getThisObject()));
         }
+
+        // Initial bubble position -> bottom right
+        positionerClass.after("getStartPosition").run(param -> {
+            try {
+                Object positioner = param.thisObject;
+                PointF point = param.getResult();
+                if (point != null && isReversed(positioner)) {
+                    RectF allowable = (RectF) XposedHelpers.callMethod(positioner, "getAllowableStackPositionRegion", 1);
+                    point.x = allowable.right;
+                    point.y = allowable.bottom;
+                }
+            } catch (Throwable t) {
+                log("getStartPosition hook failed: " + t);
+            }
+        });
     }
 }

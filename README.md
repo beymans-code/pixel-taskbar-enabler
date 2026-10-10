@@ -59,6 +59,8 @@ Gracias a que utiliza Xposed, los cambios se aplican en la memoria, haciéndolos
 * **Escala de Iconos y Carpetas:** Ajusta el tamaño de los iconos en la barra de tareas y el grid de aplicaciones.
 * **Cantidad de Iconos:** Controla cuántas aplicaciones quieres que se muestren simultáneamente en el dock inferior.
 * **Recientes tipo Móvil:** Obliga al sistema a mostrar la vista de "Aplicaciones Recientes" con el estilo clásico de teléfono, incluso cuando la interfaz simula estar en una tablet.
+* **Diseño Inferior (Bottom Layout):** Mueve el diseño de las burbujas a la parte inferior para mejorar la ergonomía a una sola mano.
+* **Posición de Cerrar (Dismiss Position):** Permite configurar dónde aparece el área de cierre de las burbujas (arriba, abajo, izquierda, derecha, centro).
 
 ---
 
@@ -94,8 +96,9 @@ Dado que esta aplicación solicita permisos especiales para modificar funciones 
 2. Instala el módulo en tu dispositivo.
 3. Abre tu **Xposed Manager**.
 4. Ve a la pestaña de "Módulos" y activa **Pixel Taskbar Enabler**.
-5. Asegúrate de que **Pixel Launcher** esté marcado en la lista de aplicaciones objetivo.
-6. Abre la aplicación de Pixel Taskbar Enabler, ajusta las opciones a tu gusto y presiona **Aplicar Cambios** (esto reiniciará tu launcher automáticamente).
+5. Asegúrate de que **Pixel Launcher** y **System UI** estén marcados en la lista de aplicaciones objetivo (este último es necesario para las opciones de burbujas).
+6. Ve a tu gestor de root (como **KernelSU**, **Magisk** o **APatch**) y concédele permisos de superusuario a **Pixel Taskbar Enabler**. Esto permite que la app reinicie el Pixel Launcher automáticamente cada vez que apliques cambios *(de lo contrario, tendrás que forzar la detención de la aplicación Pixel Launcher manualmente desde los Ajustes del sistema)*.
+7. Abre Pixel Taskbar Enabler, ajusta las opciones a tu gusto y presiona **Aplicar Cambios**.
 
 ---
 
@@ -157,6 +160,8 @@ Because it uses Xposed, changes are applied in memory, making them non-destructi
 * **Icon and Folder Scaling:** Adjust the size of the icons in the taskbar and the app grid.
 * **Icon Count:** Control how many apps you want to display simultaneously on the bottom dock.
 * **Mobile-style Recents:** Forces the system to show the "Recent Apps" view with the classic phone style, even when the interface is simulating a tablet.
+* **Bottom Layout:** Moves the bubble layout to the bottom for easier one-handed use.
+* **Dismiss Position:** Allows you to configure where the bubble dismiss area appears (top, bottom, left, right, center).
 
 ---
 
@@ -192,8 +197,9 @@ Since this application requests special permissions to modify internal system fu
 2. Install the module on your device.
 3. Open your **Xposed Manager**.
 4. Go to the "Modules" tab and enable **Pixel Taskbar Enabler**.
-5. Ensure that **Pixel Launcher** is checked in the target applications list.
-6. Open the Pixel Taskbar Enabler app, adjust the options to your liking, and press **Apply Changes** (this will restart your launcher automatically).
+5. Ensure that **Pixel Launcher** and **System UI** are checked in the target applications list (the latter is required for the bubble features).
+6. Open your root manager (such as **KernelSU**, **Magisk**, or **APatch**) and grant superuser permissions to **Pixel Taskbar Enabler**. This allows the app to restart the Pixel Launcher automatically whenever you apply changes *(otherwise, you will have to manually force stop the Pixel Launcher app via System Settings)*.
+7. Open Pixel Taskbar Enabler, adjust the options to your liking, and tap **Apply Changes**.
 
 ---
 
@@ -230,7 +236,6 @@ This project is possible thanks to the following open-source contributions and t
 ### License
 
 Pixel Taskbar Enabler is licensed under the [GNU General Public License v3](http://www.gnu.org/copyleft/gpl.html).
-
 
 <br>
 

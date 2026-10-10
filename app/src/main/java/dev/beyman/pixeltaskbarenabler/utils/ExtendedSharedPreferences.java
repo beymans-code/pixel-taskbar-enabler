@@ -51,7 +51,7 @@ public class ExtendedSharedPreferences implements SharedPreferences {
 	@Nullable
 	@Override
 	public String getString(String key, @Nullable String defValue) {
-		return prefs.getString(key, defValue);
+		return prefs.getString(key, DefaultSettings.getString(key, defValue));
 	}
 
 	@Nullable
@@ -62,7 +62,7 @@ public class ExtendedSharedPreferences implements SharedPreferences {
 
 	@Override
 	public int getInt(String key, int defValue) {
-		return prefs.getInt(key, defValue);
+		return prefs.getInt(key, DefaultSettings.getInt(key, defValue));
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class ExtendedSharedPreferences implements SharedPreferences {
 
 	@Override
 	public boolean getBoolean(String key, boolean defValue) {
-		return prefs.getBoolean(key, defValue);
+		return prefs.getBoolean(key, DefaultSettings.getBoolean(key, defValue));
 	}
 
 	@Override

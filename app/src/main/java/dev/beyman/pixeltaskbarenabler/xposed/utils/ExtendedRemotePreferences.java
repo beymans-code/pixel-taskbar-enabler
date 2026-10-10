@@ -46,6 +46,21 @@ public class ExtendedRemotePreferences extends RemotePreferences {
 		mListenerRegistered = true;
 	}
 
+	@Override
+	public String getString(String key, String defValue) {
+		return super.getString(key, dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getString(key, defValue));
+	}
+
+	@Override
+	public int getInt(String key, int defValue) {
+		return super.getInt(key, dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getInt(key, defValue));
+	}
+
+	@Override
+	public boolean getBoolean(String key, boolean defValue) {
+		return super.getBoolean(key, dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getBoolean(key, defValue));
+	}
+
 
 
 	@Override

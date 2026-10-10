@@ -26,7 +26,7 @@ public class SystemUiActivator extends XposedModPack {
     public void onPackageLoaded(XposedModuleInterface.PackageReadyParam PRParam) throws Throwable {
         boolean enableReverseBubble = false;
         if (dev.beyman.pixeltaskbarenabler.xposed.XPrefs.Xprefs != null) {
-            enableReverseBubble = dev.beyman.pixeltaskbarenabler.xposed.XPrefs.Xprefs.getBoolean("enable_reverse_bubble", false);
+            enableReverseBubble = dev.beyman.pixeltaskbarenabler.xposed.XPrefs.Xprefs.getBoolean("enable_reverse_bubble", dev.beyman.pixeltaskbarenabler.utils.DefaultSettings.getBoolean("enable_reverse_bubble"));
         }
 
         if (enableReverseBubble) {

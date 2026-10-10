@@ -14,7 +14,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:fontFamily="@font/bebas_neue_regular"
-        android:text="DISMISS POSITION"
+        android:text="@string/dismiss_position"
         android:textColor="?attr/colorPrimary"
         android:textSize="20sp"
         app:fontFamily="@font/bebas_neue_regular"
@@ -52,11 +52,11 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <RadioButton android:id="@+id/radio_dismiss_bottom" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bottom Middle (Default)" android:paddingVertical="8dp" />
-                <RadioButton android:id="@+id/radio_dismiss_top" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Top Middle" android:paddingVertical="8dp" />
-                <RadioButton android:id="@+id/radio_dismiss_left" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Left Middle" android:paddingVertical="8dp" />
-                <RadioButton android:id="@+id/radio_dismiss_right" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Right Middle" android:paddingVertical="8dp" />
-                <RadioButton android:id="@+id/radio_dismiss_center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Center" android:paddingVertical="8dp" />
+                <RadioButton android:id="@+id/radio_dismiss_bottom" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/dismiss_pos_bottom" android:paddingVertical="8dp" />
+                <RadioButton android:id="@+id/radio_dismiss_top" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/dismiss_pos_top" android:paddingVertical="8dp" />
+                <RadioButton android:id="@+id/radio_dismiss_left" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/dismiss_pos_left" android:paddingVertical="8dp" />
+                <RadioButton android:id="@+id/radio_dismiss_right" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/dismiss_pos_right" android:paddingVertical="8dp" />
+                <RadioButton android:id="@+id/radio_dismiss_center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/dismiss_pos_center" android:paddingVertical="8dp" />
             </RadioGroup>
 
         </LinearLayout>
