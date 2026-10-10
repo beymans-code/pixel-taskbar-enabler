@@ -1,6 +1,7 @@
 **1.1.0**
 - Customizable floating bubble layouts and dismiss positions
-- Fixed bubble initial position and added reverse multitasking layout
+- Fixed bubble initial position and added bubble bottom layout
+- Added independent Mobile Recents Header scaling controls
 - Updated default settings, translations, and instructions
 
 **1.0.1**

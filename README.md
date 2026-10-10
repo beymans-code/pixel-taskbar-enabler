@@ -56,10 +56,12 @@ Gracias a que utiliza Xposed, los cambios se aplican en la memoria, haciéndolos
 ### Características
 
 * **Activación de la Taskbar:** Fuerza la aparición de la barra de tareas del Pixel Launcher en tu dispositivo móvil.
+* **Escala de la Taskbar:** Ajusta la escala general de toda la barra de tareas.
 * **Escala de Iconos y Carpetas:** Ajusta el tamaño de los iconos en la barra de tareas y el grid de aplicaciones.
 * **Cantidad de Iconos:** Controla cuántas aplicaciones quieres que se muestren simultáneamente en el dock inferior.
 * **Recientes tipo Móvil:** Obliga al sistema a mostrar la vista de "Aplicaciones Recientes" con el estilo clásico de teléfono, incluso cuando la interfaz simula estar en una tablet.
-* **Diseño Inferior (Bottom Layout):** Mueve el diseño de las burbujas a la parte inferior para mejorar la ergonomía a una sola mano.
+* **Escala de Encabezados (Recientes):** Controles independientes para personalizar el tamaño de los encabezados tanto en la vista Grid (Tablet) como en la vista Móvil.
+* **Diseño Invertido de Burbujas (Bubble Bottom Layout):** Mueve el diseño de las burbujas de recientes a la parte inferior e invierte la interfaz para mejorar enormemente la ergonomía y el uso a una sola mano.
 * **Posición de Cerrar (Dismiss Position):** Permite configurar dónde aparece el área de cierre de las burbujas (arriba, abajo, izquierda, derecha, centro).
 
 ---
@@ -157,10 +159,12 @@ Because it uses Xposed, changes are applied in memory, making them non-destructi
 ### Features
 
 * **Taskbar Activation:** Forces the appearance of the Pixel Launcher taskbar on your mobile device.
+* **Taskbar Scaling:** Adjusts the overall scale of the entire taskbar.
 * **Icon and Folder Scaling:** Adjust the size of the icons in the taskbar and the app grid.
 * **Icon Count:** Control how many apps you want to display simultaneously on the bottom dock.
 * **Mobile-style Recents:** Forces the system to show the "Recent Apps" view with the classic phone style, even when the interface is simulating a tablet.
-* **Bottom Layout:** Moves the bubble layout to the bottom for easier one-handed use.
+* **Recents Header Scaling:** Independent controls to customize the header size in both Grid (Tablet) and Mobile recents views.
+* **Bubble Bottom Layout:** Moves the recent bubbles layout to the bottom and reverses the interface for significantly improved ergonomics and one-handed use.
 * **Dismiss Position:** Allows you to configure where the bubble dismiss area appears (top, bottom, left, right, center).
 
 ---

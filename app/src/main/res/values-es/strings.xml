@@ -12,7 +12,7 @@
     <string name="bubbles_settings">CONFIGURACIÓN DE BURBUJAS RECIENTES</string>
 
     <!-- Switches & Settings -->
-    <string name="bottom_bubble_layout">Diseño Inferior</string>
+    <string name="bottom_bubble_layout">Diseño Inverso</string>
     <string name="bottom_bubble_layout_desc">Mover burbujas a la parte inferior</string>
     <string name="dismiss_position">Posición de Cerrar</string>
     <string name="dismiss_pos_bottom">Abajo al medio</string>
@@ -131,17 +131,19 @@
     <!-- Changelog -->
     <string name="changelog_title">Registro de Cambios</string>
     <string name="changelog_text">1.1.0\n
-- Opciones de diseño y posiciones de descarte personalizables para la burbuja\n
-- Posición inicial de la burbuja corregida y diseño inverso de multitarea añadido\n
-- Ajustes predeterminados, traducciones e instrucciones actualizadas\n
-\n
-1.0.1\n
-- Rediseño de interfaz con barra de navegación y opciones de escala\n
-- Lógica de escalado de íconos refactorizada y arreglos en la UI\n
-- Traducciones y documentación actualizadas\n
-\n
-1.0.0\n
-- Primera versión estable
-</string>
+        - Opciones de diseño y posiciones de descarte personalizables para la burbuja\n
+        - Posición inicial de la burbuja corregida y diseño inverso de multitarea añadido (Bubble
+        Bottom Layout)\n
+        - Controles independientes de escala para los encabezados de recientes\n
+        - Ajustes predeterminados, traducciones e instrucciones actualizadas\n
+        \n
+        1.0.1\n
+        - Rediseño de interfaz con barra de navegación y opciones de escala\n
+        - Lógica de escalado de íconos refactorizada y arreglos en la UI\n
+        - Traducciones y documentación actualizadas\n
+        \n
+        1.0.0\n
+        - Primera versión estable
+    </string>
 
 </resources>

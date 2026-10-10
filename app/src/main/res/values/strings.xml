@@ -91,13 +91,14 @@
 
     <!-- Bottom Sheet Instructions -->
     <string name="instructions">Instructions</string>
-    <string name="instruction_0"><b>Prerequisites:</b>\n&#8226; Rooted Pixel device (Magisk, KernelSU)\n&#8226; Active Zygisk environment\n&#8226; Xposed framework installed (LSPosed, Vector, etc.)\n\n<b>Note:</b> For bubble features, make sure <i>System UI</i> is checked in your Xposed manager scope.</string>
+    <string name="instruction_0">
+        <b>Prerequisites:</b>\n&#8226; Rooted Pixel device (Magisk, KernelSU)\n&#8226; Active Zygisk environment\n&#8226; Xposed framework installed (LSPosed, Vector, etc.)\n\n<b>Note:</b> For bubble features, make sure <i>System UI</i> is checked in your Xposed manager scope.</string>
     <string name="instruction_1">1. Open Xposed (<a href="https://github.com/JingMatrix/Vector">JingMatrix/Vector</a>), enable the module and ensure \'Pixel Launcher\' is checked.</string>
-    <string name="instruction_2">2. Ensure a Zygisk environment (e.g., <a
-            href="https://github.com/JingMatrix/NeoZygisk">NeoZygisk</a>).</string>
+    <string name="instruction_2">2. Ensure a Zygisk environment (e.g., <a href="https://github.com/JingMatrix/NeoZygisk">NeoZygisk</a>).
+    </string>
     <string name="instruction_3">3. Grant root permissions to Pixel Taskbar Enabler from your
-        manager, either <a href="https://github.com/tiann/KernelSU">KernelSU</a> or <a
-            href="https://github.com/topjohnwu/Magisk">Magisk</a>.</string>
+        manager, either <a href="https://github.com/tiann/KernelSU">KernelSU</a> or <a href="https://github.com/topjohnwu/Magisk">Magisk</a>.
+    </string>
     <string name="instruction_4">4. Turn on the switch above to enable the Taskbar and Enjoy!</string>
 
     <!-- Toast & Log Messages -->
@@ -123,17 +124,18 @@
     <!-- Changelog -->
     <string name="changelog_title">Changelog</string>
     <string name="changelog_text">1.1.0\n
-- Customizable floating bubble layouts and dismiss positions\n
-- Fixed bubble initial position and added reverse multitasking layout\n
-- Updated default settings, translations, and instructions\n
-\n
-1.0.1\n
-- UI redesign with navbar and taskbar scaling options\n
-- Refactored icon scaling logic and UI fixes\n
-- Added missing translations and updated documentation\n
-\n
-1.0.0\n
-- Initial stable release
-</string>
+        - Customizable floating bubble layouts and dismiss positions\n
+        - Fixed bubble initial position and added Bubble Bottom Layout\n
+        - Added independent Mobile Recents Header scaling controls\n
+        - Updated default settings, translations, and instructions\n
+        \n
+        1.0.1\n
+        - UI redesign with navbar and taskbar scaling options\n
+        - Refactored icon scaling logic and UI fixes\n
+        - Added missing translations and updated documentation\n
+        \n
+        1.0.0\n
+        - Initial stable release
+    </string>
 
 </resources>
